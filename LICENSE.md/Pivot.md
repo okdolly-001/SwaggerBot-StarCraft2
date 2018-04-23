@@ -8,7 +8,7 @@
 >This is vague and ambitiou, which agent and what are we building.
 >We want to create a very specific agent that does one task spectacularly well.
 
-### I suggest we choose one of these mini-projects suggested by DeepMind to work. DeepMind suggest these mini-games precisely because they now how complex it is to create a general agent that can master all the tasks involved in the game. These two are most relevant to what we talked about, but if you think another one in this file [Projects suggested by DeepMind](https://github.com/deepmind/pysc2/blob/master/docs/mini_games.md) is realistic, let's have a group vote.
+### I suggest we choose one of these mini-projects suggested by DeepMind and start hacking. DeepMind suggest these mini-games precisely because they now how complex it is to create a general agent that can master all the tasks involved in the game. These two are most relevant to what we talked about, but if you think another one in this file [Projects suggested by DeepMind](https://github.com/deepmind/pysc2/blob/master/docs/mini_games.md) is realistic, let's have a group vote.
 
 ###
 ## MoveToBeacon

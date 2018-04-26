@@ -48,3 +48,9 @@ Get all the agents from aforementioned tutorial up and running in your computer,
 
 
  1.[Reinforcement Learning Agent using Tensorflow](https://github.com/xhujoy/pysc2-agents)
+ 
+ 
+ 2.[Supervised-End-to-end-Weight-sharing-for-StarCraft-II](https://github.com/tonybeltramelli/Supervised-End-to-end-Weight-sharing-for-StarCraft-II)
+ 
+ 
+ 

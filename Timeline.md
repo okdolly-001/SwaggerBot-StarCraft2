@@ -26,5 +26,6 @@ Get all the agents from aforementioned tutorial up and running in your computer,
 
 2.[Simple Reinforcement Learning with Tensorflow Part 0: Q-Learning with Tables and Neural Networks](https://medium.com/emergent-future/simple-reinforcement-learning-with-tensorflow-part-0-q-learning-with-tables-and-neural-networks-d195264329d0)
 
+### Github Repo
 #### Reinforcement Learning Agent using Tensorflow
-https://github.com/PeterLayton/ICRA2018_SC2env_RL
+https://github.com/xhujoy/pysc2-agents

@@ -10,7 +10,7 @@ Feel free to edit.
 #### Week four : 4.22-4.29
 1.Understand what PySC2 API allows us to do by reading [PySC2 implementations](https://github.com/deepmind/pysc2) and this [DeepMind paper](https://deepmind.com/documents/110/sc2le.pdf) . 
 
->  **Important:** Look at the [mini-game](https://github.com/deepmind/pysc2/blob/master/docs/mini_games.md). I will we should narrow down to a dead simple goal.<br/>
+>  **Important:** Look at the [mini-game](https://github.com/deepmind/pysc2/blob/master/docs/mini_games.md). <br/>
 
 2.Understanding every line of the code in all the files in this [Github tutorial](https://github.com/skjb/pysc2-tutorial). This an accompany [Medium post](https://chatbotslife.com/building-a-basic-pysc2-agent-b109cde1477c) for the Github repo.
 Get all the agents from aforementioned tutorial up and running in your computer, so that you figure out how to create a simplge agent.<br/>

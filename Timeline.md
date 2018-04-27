@@ -44,13 +44,20 @@ Get all the agents from aforementioned tutorial up and running in your computer,
 
 11.  [_Part 8 — Asynchronous Actor-Critic Agents (A3C)_](https://medium.com/@awjuliani/simple-reinforcement-learning-with-tensorflow-part-8-asynchronous-actor-critic-agents-a3c-c88f72a5e9f2#.hg13tn9zw)
 
+12.  [Deep Deterministic Policy Gradients in TensorFlow](https://pemami4911.github.io/blog/2016/08/21/ddpg-rl.html#References)
+
 ### Github Repo
 
+**Authors of xhujoy/pysc2-agents [Reinforcement Learning Agent using Tensorflow](https://github.com/xhujoy/pysc2-agents) and [pekaalto/sc2aibot] (https://github.com/pekaalto/sc2aibot) were the first to attempt replicating [1](https://deepmind.com/documents/110/sc2le.pdf) and their implementations were used as a general inspiration during development of this project, however their aim was more towards replicating results than architecture, missing key aspects, such as full feature and action space support. Authors of simonmeister/pysc2-rl-agents also aim to replicate both results and architecture, though their final goals seem to be in another direction. Their policy implementation was used as a loose reference for this project.
 
  1.[Reinforcement Learning Agent using Tensorflow](https://github.com/xhujoy/pysc2-agents)
  
  
  2.[Supervised-End-to-end-Weight-sharing-for-StarCraft-II](https://github.com/tonybeltramelli/Supervised-End-to-end-Weight-sharing-for-StarCraft-II)
  
+ 3.[(D)RL Agent For PySC2 Environment. Close replication of DeepMind's SC2LE paper architecture.](https://github.com/Inoryy/pysc2-rl-agent)
+reduced set of features (unified across all mini-games) or alternative approaches, such as HRL [3] or Auxiliary Tasks [4].
  
+ 4.[从头开始构建自己的星际二agent(Chinese)](https://github.com/wwxFromTju/sc2-101-zh) 
  
+

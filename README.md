@@ -50,10 +50,9 @@ Get all the agents from aforementioned tutorial up and running in your computer,
 
 ### Github Repo
 
-> **Authors of xhujoy/pysc2-agents [Reinforcement Learning Agent using Tensorflow (actorcritic)](https://github.com/xhujoy/pysc2-agents) and [pekaalto/sc2aibot (actorcritic)] (https://github.com/pekaalto/sc2aibot) were the first to attempt replicating [1](https://deepmind.com/documents/110/sc2le.pdf) and their implementations were used as a general inspiration during development of this project, however their aim was more towards replicating results than architecture, missing key aspects, such as full feature and action space support. Authors of simonmeister/pysc2-rl-agents also aim to replicate both results and architecture, though their final goals seem to be in another direction. Their policy implementation was used as a loose reference for this project.**
+> **Authors of xhujoy/pysc2-agents [Reinforcement Learning Agent using Tensorflow (actorcritic)](https://github.com/xhujoy/pysc2-agents) and [pekaalto/sc2aibot (actorcritic)](https://github.com/pekaalto/sc2aibot) were the first to attempt replicating [1](https://deepmind.com/documents/110/sc2le.pdf) and their implementations were used as a general inspiration during development of this project, however their aim was more towards replicating results than architecture, missing key aspects, such as full feature and action space support. Authors of simonmeister/pysc2-rl-agents also aim to replicate both results and architecture, though their final goals seem to be in another direction. Their policy implementation was used as a loose reference for this project.**
 
  1.[Reinforcement Learning Agent using Tensorflow](https://github.com/xhujoy/pysc2-agents)
- 
  
  2.[Supervised-End-to-end-Weight-sharing-for-StarCraft-II](https://github.com/tonybeltramelli/Supervised-End-to-end-Weight-sharing-for-StarCraft-II)
  
@@ -63,3 +62,5 @@ reduced set of features (unified across all mini-games) or alternative approache
  4.[从头开始构建自己的星际二agent(Chinese)](https://github.com/wwxFromTju/sc2-101-zh) 
  
  5.[DQN agent](https://github.com/phraust1612/MinervaSc2)
+
+ 6.[Replay data documented here] (https://github.com/wuhuikai/MSC)

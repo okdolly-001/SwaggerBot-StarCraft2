@@ -2,10 +2,42 @@
 
 Feel free to edit.
 
+#### Week six : 5.10-5.17
+
+##### Assume you have already completed all the tasks in Week one. Parkinson's law says that a task takes as much time as you allocate for it. Deadline is a productivity booster because we don't check the phone every 20 minutes or hang out with friends between now and the deadline. Aim to complete the task less than the estimated time. Sucess = Focus * Time
+
+>##### If you have already mastered TensorFlow, then go ahead and write code. 
+>##### For those of you who don't know TensorFlow, Keras or PyTorch. Why PyTorch instead of TensorFlow, which has multiple existing implementations of Starcraft agent? Four reasons. First, I used TensorFlow for a Udacity Self-driving project, it was a very unpleasant experience. TF is very verbose and hard to debug. Second, I went to a Kaggle Grandmaster panel last quarter, they told me that they all use PyTorch instead of TF. Third, PyTorch is beginner-friendly. It resembles Numpy. Four, there are plenty implementations of RL algorithms in PyTorch. We just need to translate TF implementations of Starcraft agent into PyTorch. If we can't learn things fast enough to build things in short period of time, then we can't survive the AI age. 
+
+1. PyTorch is more beginner-friendly than TensorFlow and more flexible than Keras. Go through the official tutorials for beginners: [Deep Learning with PyTorch: A 60 Minute Blitz](https://pytorch.org/tutorials/beginner/deep_learning_60min_blitz.html),[Learning PyTorch with Examples](https://pytorch.org/tutorials/beginner/pytorch_with_examples.html) and [Data Loading and Processing Tutorial](https://pytorch.org/tutorials/beginner/data_loading_tutorial.html). ***Estimated time: 6-7 hrs.***
+
+2. Go through PyTorch's official [Reinforcement Learning (DQN) tutorial](https://pytorch.org/tutorials/intermediate/reinforcement_q_learning.html). ***Estimated time: 1-2 hrs.***
+
+3. Reference point: [Morvan's PyTorch tutorials  ](https://github.com/MorvanZhou/PyTorch-Tutorial/tree/master/tutorial-contents-notebooks). He breaks down PyTorch into individual topics, such as Activation, CNN. Each Jupyter notebook is super short and easily digestible. You can check out the individual topics when running into roadblocks. No need to go through all at once.
 
 
+4. Please please read these two tutorials [Introduction to Various Reinforcement Learning Algorithms. Part I (Q-Learning, SARSA, DQN, DDPG)(at least read this)](https://towardsdatascience.com/introduction-to-various-reinforcement-learning-algorithms-i-q-learning-sarsa-dqn-ddpg-72a5e0cb6287) and [Introduction to Various Reinforcement Learning Algorithms. Part II (TRPO, PPO)](https://towardsdatascience.com/introduction-to-various-reinforcement-learning-algorithms-part-ii-trpo-ppo-87f2c5919bb9). Or else you won't understand step 5 onwards. ***Estimated time: 4-6 hrs.***
+>  **Optional:**  Ideally, you should have a basic but comprehensive understanding of reinforcement learning as a field, but due to time constraint, just understand the gist of these two posts would suffice. Check out the links under each subtopic in [my blog post](http://www.dollyye.com/) if you want to have an in-depth understanding of RL. Estimated time: 8-10 hrs.
 
-## Timeline
+5. Have a basic idea of these three algorithms:
+     An [OpenAI blog post](https://blog.openai.com/openai-baselines-ppo/) that gives you a broad overview.
+     
+   - [Advantage Actor Critic (A2C)](https://hackernoon.com/intuitive-rl-intro-to-advantage-actor-critic-a2c-4ff545978752) . This is the best introduction to A2C; and it is a cartoon story about a fox! Hooray! ***Estimated time: 0.5-1 hrs.***
+
+   - [Proximal Policy Optimization (PPO)](https://towardsdatascience.com/introduction-to-various-reinforcement-learning-algorithms-part-ii-trpo-ppo-87f2c5919bb9) (this is hard, I think the author assumes that you already understand policy ...gradients. Estimated time: 8-10 hrs. ***Estimated time: 2 hrs.***
+
+   -  [Scalable trust-region method for deep reinforcement learning using Kronecker-factored approximation (ACKTR)](https://arxiv.org/pdf/1708.05144.pdf). This the OpenAI paper, so you can just skim each sub-title. ***Estimated time: 0.5 hrs.***
+
+
+6. Steps 1-5 prepares us for [PyTorch implementation of Advantage Actor Critic (A2C), Proximal Policy Optimization (PPO) and Scalable trust-region method for deep reinforcement learning using Kronecker-factored approximation (ACKTR)](https://github.com/ikostrikov/pytorch-a2c-ppo-acktr).Note how different modules work together (agent, model, etc). Don't be discouraged when you don't understand, keep going. ***Estimated time: 6-10 hrs.***
+>  **Note:**  Understand the code is very challenging but this is the crux of how we are going to train the StarCraft agent. 
+
+
+7. Translate this [TF implementation of A2C Starcraft agent](https://github.com/simonmeister/pysc2-rl-agents/blob/master/rl/agents/a2c/agent.py) into PyTorch. Culmination of Step 1 - 6.
+
+
+This is a lot, spend a 20- 30 hours, prepare to pull all-nighters. If we don't learn it now, we will never learn it.
+
 
 #### Week four : 4.22-4.29
 1.Understand what PySC2 API allows us to do by reading [PySC2 implementations](https://github.com/deepmind/pysc2) and this [DeepMind paper](https://deepmind.com/documents/110/sc2le.pdf) . 
@@ -61,3 +93,4 @@ reduced set of features (unified across all mini-games) or alternative approache
  4.[从头开始构建自己的星际二agent(Chinese)](https://github.com/wwxFromTju/sc2-101-zh) 
  
  5.[DQN agent](https://github.com/phraust1612/MinervaSc2)
+

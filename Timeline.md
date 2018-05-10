@@ -24,7 +24,7 @@ Feel free to edit.
      
    - [Advantage Actor Critic (A2C)](https://hackernoon.com/intuitive-rl-intro-to-advantage-actor-critic-a2c-4ff545978752) . This is the best introduction to A2C; and it is a cartoon story about a fox! Hooray! ***Estimated time: 0.5-1 hrs.***
 
-   - [Proximal Policy Optimization (PPO)](https://towardsdatascience.com/introduction-to-various-reinforcement-learning-algorithms-part-ii-trpo-ppo-87f2c5919bb9) (this is hard, I think the author assumes that you already understand policy ...gradients. Estimated time: 8-10 hrs. ***Estimated time: 2 hrs.***
+   - [Proximal Policy Optimization (PPO)](https://towardsdatascience.com/introduction-to-various-reinforcement-learning-algorithms-part-ii-trpo-ppo-87f2c5919bb9) (this is hard, I think the author assumes that you already understand policy gradients. Estimated time: 8-10 hrs. ***Estimated time: 2 hrs.***
 
    -  [Scalable trust-region method for deep reinforcement learning using Kronecker-factored approximation (ACKTR)](https://arxiv.org/pdf/1708.05144.pdf). This the OpenAI paper, so you can just skim each sub-title. ***Estimated time: 0.5 hrs.***
 

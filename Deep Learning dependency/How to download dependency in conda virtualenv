@@ -1,4 +1,4 @@
-If you have conda, activate your conda environment
+If you have conda, activate your conda environment, change the name in environment.yml (first line) to your conda virtualenv name.
       conda env update -f= environment.yml
 
 Create Conda virtual environment:

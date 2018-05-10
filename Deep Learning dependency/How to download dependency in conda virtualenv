@@ -1,0 +1,8 @@
+If you have conda, activate your conda environment
+      conda env update -f= environment.yml
+
+Create Conda virtual environment:
+
+conda create -n  your_package_name python = 3.6
+source activate your_package_name
+source deactivate your_package_name

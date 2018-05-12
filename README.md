@@ -36,7 +36,8 @@ Feel free to edit.
 7. Translate this [TF implementation of A2C Starcraft agent](https://github.com/simonmeister/pysc2-rl-agents/blob/master/rl/agents/a2c/agent.py) into PyTorch. Culmination of Step 1 - 6.
 
 
-8. Fill in the Jupyter notebook at Yandex Practical_RL(https://github.com/yandexdataschool/Practical_RL)
+8. Fill in the Jupyter notebook at [Yandex Practical_RL](https://github.com/yandexdataschool/Practical_RL)
+
 This is a lot, spend a 20- 30 hours, prepare to pull all-nighters. If we don't learn it now, we will never learn it.
 
 

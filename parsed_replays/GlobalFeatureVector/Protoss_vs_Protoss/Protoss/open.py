@@ -1,8 +1,10 @@
+import os
 import numpy as np
-from tempfile import TemporaryFile
-outfile = TemporaryFile()
-data = np.load('2@ffff487609735303a99e2d156b9d28163d0b371fe4e69cc31940ce66d2f6bb9e.SC2Replay.npz')
+from scipy import sparse
+
+PATH = '/Users/domore/SwaggerBot-StarCraft2/parsed_replays/GlobalFeatureVector/Protoss_vs_Protoss/Protoss/'
+filenames = os.listdir(PATH)
+game1 = filenames[0]
+data = np.asarray(sparse.load_npz(PATH+game1).todense())
+
 print(data)
-
-
-

@@ -4,10 +4,10 @@ Feel free to edit.
 
 #### Week six : 5.10-5.17
 
-##### Assume you have already completed all the tasks in Week one. Parkinson's law says that a task takes as much time as you allocate for it. Deadline is a productivity booster because we don't check the phone every 20 minutes or hang out with friends between now and the deadline. Aim to complete the task less than the estimated time. Sucess = Focus * Time
+* Assume you have already completed all the tasks in Week one. Parkinson's law says that a task takes as much time as you allocate for it. Deadline is a productivity booster because we don't check the phone every 20 minutes or hang out with friends between now and the deadline. Aim to complete the task less than the estimated time. Sucess = Focus * Time
 
->##### If you have already mastered TensorFlow, then go ahead and write code. 
->##### For those of you who don't know TensorFlow, Keras or PyTorch. Why PyTorch instead of TensorFlow, which has multiple existing implementations of Starcraft agent? Four reasons. First, I used TensorFlow for a Udacity Self-driving project, it was a very unpleasant experience. TF is very verbose and hard to debug. Second, I went to a Kaggle Grandmaster panel last quarter, they told me that they all use PyTorch instead of TF. Third, PyTorch is beginner-friendly. It resembles Numpy. Four, there are plenty implementations of RL algorithms in PyTorch. We just need to translate TF implementations of Starcraft agent into PyTorch. If we can't learn things fast enough to build things in short period of time, then we can't survive the AI age. 
+>  If you have already mastered TensorFlow, then go ahead and write code. 
+>  For those of you who don't know TensorFlow, Keras or PyTorch. Why PyTorch instead of TensorFlow, which has multiple existing implementations of Starcraft agent? Four reasons. First, I used TensorFlow for a Udacity Self-driving project, it was a very unpleasant experience. TF is very verbose and hard to debug. Second, I went to a Kaggle Grandmaster panel last quarter, they told me that they all use PyTorch instead of TF. Third, PyTorch is beginner-friendly. It resembles Numpy. Four, there are plenty implementations of RL algorithms in PyTorch. We just need to translate TF implementations of Starcraft agent into PyTorch. If we can't learn things fast enough to build things in short period of time, then we can't survive the AI age. 
 
 1. PyTorch is more beginner-friendly than TensorFlow and more flexible than Keras. Go through the official tutorials for beginners: [Deep Learning with PyTorch: A 60 Minute Blitz](https://pytorch.org/tutorials/beginner/deep_learning_60min_blitz.html),[Learning PyTorch with Examples](https://pytorch.org/tutorials/beginner/pytorch_with_examples.html) and [Data Loading and Processing Tutorial](https://pytorch.org/tutorials/beginner/data_loading_tutorial.html). ***Estimated time: 6-7 hrs.***
 
@@ -17,7 +17,7 @@ Feel free to edit.
 
 
 4. Please please read these two tutorials [Introduction to Various Reinforcement Learning Algorithms. Part I (Q-Learning, SARSA, DQN, DDPG)(at least read this)](https://towardsdatascience.com/introduction-to-various-reinforcement-learning-algorithms-i-q-learning-sarsa-dqn-ddpg-72a5e0cb6287) and [Introduction to Various Reinforcement Learning Algorithms. Part II (TRPO, PPO)](https://towardsdatascience.com/introduction-to-various-reinforcement-learning-algorithms-part-ii-trpo-ppo-87f2c5919bb9). Or else you won't understand step 5 onwards. ***Estimated time: 4-6 hrs.***
->  **Optional:**  Ideally, you should have a basic but comprehensive understanding of reinforcement learning as a field, but due to time constraint, just understand the gist of these two posts would suffice. Check out the links under each subtopic in [my blog post](http://www.dollyye.com/) if you want to have an in-depth understanding of RL. Estimated time: 8-10 hrs.
+>  **Note:**  Ideally, you should have a basic but comprehensive understanding of reinforcement learning as a field, but due to time constraint, just understand the gist of these two posts would suffice. Check out the links under each subtopic in [my blog post](http://www.dollyye.com/) if you want to have an in-depth understanding of RL. Estimated time: 8-10 hrs.<br/>
 
 5. Have a basic idea of these three algorithms:
      An [OpenAI blog post](https://blog.openai.com/openai-baselines-ppo/) that gives you a broad overview.
@@ -30,7 +30,7 @@ Feel free to edit.
 
 
 6. Steps 1-5 prepares us for [PyTorch implementation of Advantage Actor Critic (A2C), Proximal Policy Optimization (PPO) and Scalable trust-region method for deep reinforcement learning using Kronecker-factored approximation (ACKTR)](https://github.com/ikostrikov/pytorch-a2c-ppo-acktr).Note how different modules work together (agent, model, etc). Don't be discouraged when you don't understand, keep going. ***Estimated time: 6-10 hrs.***
->  **Note:**  Understand the code is very challenging but this is the crux of how we are going to train the StarCraft agent. 
+>  **Note:**  Understand the code is very challenging but this is the crux of how we are going to train the StarCraft agent. <br/>
 
 
 7. Translate this [TF implementation of A2C Starcraft agent](https://github.com/simonmeister/pysc2-rl-agents/blob/master/rl/agents/a2c/agent.py) into PyTorch. Culmination of Step 1 - 6.

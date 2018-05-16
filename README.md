@@ -94,6 +94,6 @@ reduced set of features (unified across all mini-games) or alternative approache
  
  4.[从头开始构建自己的星际二agent(Chinese)](https://github.com/wwxFromTju/sc2-101-zh) 
  
- 5.[DQN agent](https://github.com/phraust1612/MinervaSc2)
+ 5.[DQN agent](https://github.com/phraust1612/MinervaSc2) //Has bugs 
 
  6.[Replay data documented here](https://github.com/wuhuikai/MSC)

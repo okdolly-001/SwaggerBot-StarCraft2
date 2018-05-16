@@ -1,4 +1,9 @@
-
+"""
+To read on sc2reader documentation visit: 
+	https://sc2reader.readthedocs.io/en/latest/index.html
+	or 
+	https://github.com/GraylinKim/sc2reader
+"""
 import os
 import sc2reader
 import pandas as pd

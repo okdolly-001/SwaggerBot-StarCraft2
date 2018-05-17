@@ -30,6 +30,7 @@ _TERRAN_BARRACKS = 21
 _NOT_QUEUED = [0]
 _QUEUED = [1]
 
+#Define action
 ACTION_DO_NOTHING = 'donothing'
 ACTION_SELECT_SCV = 'selectscv'
 ACTION_BUILD_SUPPLY_DEPOT = 'buildsupplydepot'
@@ -54,6 +55,7 @@ KILL_UNIT_REWARD = 0.2
 KILL_BUILDING_REWARD = 0.5
 
 # Stolen from https://github.com/MorvanZhou/Reinforcement-learning-with-tensorflow
+#This keeps track of states and actions. 
 class QLearningTable:
     def __init__(self, actions, learning_rate=0.01, reward_decay=0.9, e_greedy=0.9):
         self.actions = actions  # a list

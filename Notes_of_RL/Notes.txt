@@ -1,0 +1,49 @@
+Notes on Reinforcement learning algorithms 
+
+
+Features of RL:
+	1) No supervisor present to tell the best possible action. 
+	2) Time: Input of the next step is dependent on the previous step. 
+	3) Delayed Reward: A reward is given at completion of a task. 
+
+- epsilon greedy is a RL techniques 
+
+In general, 
+	- policy based: find optimal policy 
+	- value based: optimal cummulative reward
+
+
+- The term Advantage is commonly used in numerous RL algorithms. 
+Intuitively, its how good an action is compared to the average action for specific state. 
+- The average Q value of a state is defined as Value(V).
+
+
+1) Actor Advantage Critic (A2C):
+
+	- In RL, an agent moves through states in an environment by taking actions, trying to maximize rewrads along the way. 
+	- A2C takes an input state and outputs 1) An estimate of how many rewards they expect to get from that point onwards, the state value. 2) A recommendation of what action to take, the policy. 
+	- A reward is associated with the state and action directly preceding it. 
+	- A set of state-action-reward make up for single observation. 
+	- Could work in continuous as well as discrete action space. 
+
+
+	- Actor-critic methods implement generalised policy iteration- alternating between a policy evaluation and a policy improvement step. It combines both value-iteration and policy-iteration. 
+
+	- A network estimates:
+		- Value function V(s): How good a certain state is to be in 
+		- policy pi(s): a set of action probability outputs. 
+		- the agent uses the value estimate(the critic) to update the policy(the actor). 
+
+	- Advantage: 
+		- The insight of using advantage estimates rather than just discounted returns is to allow the agent to determine not just how good its actions were, but how much better they turned out to be than expected. Intuitively, this allows the algorithm to focus on where the network’s predictions were lacking.
+		- Advantage Estimate: A = R - V(s)
+		- Actor uses advantage and critic uses error 
+
+
+    - To encourage exploration of different actions, a value called Entropy is subtracted from the loss function. 
+
+	- Asynchronous actor advantage Critic(A3C):
+		- There is a global network and multiple worker agents have their own set of network parameter. 
+
+2) Proximal Policy Optimization 
+	- tries to update the policy conservatively, without affecting its performance adversely between each policy update.

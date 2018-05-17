@@ -1,0 +1,1 @@
+{"name": "StarCraft II:TvT", "replays_path": "train_val_test/Terran_vs_Terran", "race": "Terran", "enemy_race": "Terran", "phrase": "train", "gpu_id": 0, "lr": 0.001, "seed": 1, "n_steps": 20, "n_replays": 256, "n_epoch": 10, "save_intervel": 1000000, "save_path": "checkpoints/StarCraft II:TvT", "model_path": "checkpoints/StarCraft II:TvT/snapshots"}

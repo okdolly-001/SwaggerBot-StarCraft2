@@ -16,6 +16,7 @@ _BUILD_BARRACKS = actions.FUNCTIONS.Build_Barracks_screen.id
 _TRAIN_MARINE = actions.FUNCTIONS.Train_Marine_quick.id
 _SELECT_ARMY = actions.FUNCTIONS.select_army.id
 _ATTACK_MINIMAP = actions.FUNCTIONS.Attack_minimap.id
+#Command SCV's to gather minerals.
 _HARVEST_GATHER = actions.FUNCTIONS.Harvest_Gather_screen.id
 
 _PLAYER_RELATIVE = features.SCREEN_FEATURES.player_relative.index
@@ -34,6 +35,7 @@ _NEUTRAL_MINERAL_FIELD = 341
 
 _NOT_QUEUED = [0]
 _QUEUED = [1]
+#detect the loaction of mineral patches
 _SELECT_ALL = [2]
 
 DATA_FILE = 'sparse_agent_data'

@@ -156,8 +156,10 @@ class SparseAgent(base_agent.BaseAgent):
         if obs.last():
             reward = obs.reward
         
+            #terminal indicates a special state that applies the full reward. 
             self.qlearn.learn(str(self.previous_state), self.previous_action, reward, 'terminal')
             
+            #put in gzipped pickle format, so that it can be reloaded if our agent is stopped for any reason
             self.qlearn.q_table.to_pickle(DATA_FILE + '.gz', 'gzip')
             
             self.previous_action = None
@@ -311,4 +313,5 @@ class SparseAgent(base_agent.BaseAgent):
                         
                         return actions.FunctionCall(_HARVEST_GATHER, [_QUEUED, target])
         
+        #Call _NO_OP since there is no value in proceeding any further. 
         return actions.FunctionCall(_NO_OP, [])

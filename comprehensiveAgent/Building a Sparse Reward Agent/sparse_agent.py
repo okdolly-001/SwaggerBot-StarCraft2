@@ -38,12 +38,17 @@ _QUEUED = [1]
 #detect the loaction of mineral patches
 _SELECT_ALL = [2]
 
+#allow users to select all of the units of the same type on screen in one action
 DATA_FILE = 'sparse_agent_data'
 
 ACTION_DO_NOTHING = 'donothing'
+#select SCV, build supply depot, send SCV to harvest minerals
 ACTION_BUILD_SUPPLY_DEPOT = 'buildsupplydepot'
+#select SCV, build barracks, send SCV to harvest minerals
 ACTION_BUILD_BARRACKS = 'buildbarracks'
+#select all barracks, train marine, do nothing 
 ACTION_BUILD_MARINE = 'buildmarine'
+#select army, attacj coordinates, do nothing
 ACTION_ATTACK = 'attack'
 
 smart_actions = [
@@ -52,7 +57,7 @@ smart_actions = [
     ACTION_BUILD_BARRACKS,
     ACTION_BUILD_MARINE,
 ]
-
+#Spliting mini-map in 4 quadrants. 
 for mm_x in range(0, 64):
     for mm_y in range(0, 64):
         if (mm_x + 1) % 32 == 0 and (mm_y + 1) % 32 == 0:
@@ -103,6 +108,7 @@ class QLearningTable:
             # append new state to q table
             self.q_table = self.q_table.append(pd.Series([0] * len(self.actions), index=self.q_table.columns, name=state))
 
+#sparse rewards, essentially the agent will get a reward of 1 for winning the game, or -1 for losing the game. 
 class SparseAgent(base_agent.BaseAgent):
     def __init__(self):
         super(SparseAgent, self).__init__()
@@ -115,8 +121,10 @@ class SparseAgent(base_agent.BaseAgent):
         self.cc_y = None
         self.cc_x = None
         
+        # will track the sequence position within a multistep action. 
         self.move_number = 0
         
+        # 
         if os.path.isfile(DATA_FILE + '.gz'):
             self.qlearn.q_table = pd.read_pickle(DATA_FILE + '.gz', compression='gzip')
         
@@ -161,13 +169,15 @@ class SparseAgent(base_agent.BaseAgent):
             return actions.FunctionCall(_NO_OP, [])
         
         unit_type = obs.observation['screen'][_UNIT_TYPE]
-
-        if obs.first():
+        
+        # Utility that allows to extract the information we need from our selected action. 
+        if obs.first(): #check if its first action. 
             player_y, player_x = (obs.observation['minimap'][_PLAYER_RELATIVE] == _PLAYER_SELF).nonzero()
             self.base_top_left = 1 if player_y.any() and player_y.mean() <= 31 else 0
         
             self.cc_y, self.cc_x = (unit_type == _TERRAN_COMMANDCENTER).nonzero()
-
+    
+        # variables required 
         cc_y, cc_x = (unit_type == _TERRAN_COMMANDCENTER).nonzero()
         cc_count = 1 if cc_y.any() else 0
         
@@ -177,6 +187,7 @@ class SparseAgent(base_agent.BaseAgent):
         barracks_y, barracks_x = (unit_type == _TERRAN_BARRACKS).nonzero()
         barracks_count = int(round(len(barracks_y) / 137))
             
+        #count to keep track of multi state action 
         if self.move_number == 0:
             self.move_number += 1
             
@@ -186,6 +197,7 @@ class SparseAgent(base_agent.BaseAgent):
             current_state[2] = barracks_count
             current_state[3] = obs.observation['player'][_ARMY_SUPPLY]
     
+            # mark quadrant hot if it contains any enemy units.
             hot_squares = np.zeros(4)        
             enemy_y, enemy_x = (obs.observation['minimap'][_PLAYER_RELATIVE] == _PLAYER_HOSTILE).nonzero()
             for i in range(0, len(enemy_y)):
@@ -194,6 +206,7 @@ class SparseAgent(base_agent.BaseAgent):
                 
                 hot_squares[((y - 1) * 2) + (x - 1)] = 1
             
+            #If the base agent is at the bottom-right we invert the board so its quick. 
             if not self.base_top_left:
                 hot_squares = hot_squares[::-1]
             
@@ -210,6 +223,7 @@ class SparseAgent(base_agent.BaseAgent):
         
             smart_action, x, y = self.splitAction(self.previous_action)
             
+            #Choose any x and y coordinate if they exist. 
             if smart_action == ACTION_BUILD_BARRACKS or smart_action == ACTION_BUILD_SUPPLY_DEPOT:
                 unit_y, unit_x = (unit_type == _TERRAN_SCV).nonzero()
                     
@@ -218,14 +232,16 @@ class SparseAgent(base_agent.BaseAgent):
                     target = [unit_x[i], unit_y[i]]
                     
                     return actions.FunctionCall(_SELECT_POINT, [_NOT_QUEUED, target])
-                
+            #identify all SCV points on the screen and click one at random. 
             elif smart_action == ACTION_BUILD_MARINE:
                 if barracks_y.any():
                     i = random.randint(0, len(barracks_y) - 1)
                     target = [barracks_x[i], barracks_y[i]]
             
+                    #_SELECT_ALL selects all barracks on the screen. 
                     return actions.FunctionCall(_SELECT_POINT, [_SELECT_ALL, target])
                 
+            #First step for attacking a location is to select the army.     
             elif smart_action == ACTION_ATTACK:
                 if _SELECT_ARMY in obs.observation['available_actions']:
                     return actions.FunctionCall(_SELECT_ARMY, [_NOT_QUEUED])

@@ -40,6 +40,7 @@ ACTION_BUILD_MARINE = 'buildmarine'
 ACTION_SELECT_ARMY = 'selectarmy'
 ACTION_ATTACK = 'attack'
 
+#Contains an action to attack every single x and y coordinate combination on the mini map
 smart_actions = [
     ACTION_DO_NOTHING,
     ACTION_SELECT_SCV,
@@ -49,10 +50,11 @@ smart_actions = [
     ACTION_BUILD_MARINE,
     ACTION_SELECT_ARMY,
 ]
-
+#Reduce to 4*4 to effectively attack a location. 
 for mm_x in range(0, 64):
     for mm_y in range(0, 64):
         if (mm_x + 1) % 16 == 0 and (mm_y + 1) % 16 == 0:
+            # We move the attack corrdinate to center by shifting by 8. 
             smart_actions.append(ACTION_ATTACK + '_' + str(mm_x - 8) + '_' + str(mm_y - 8))
 
 KILL_UNIT_REWARD = 0.2
@@ -143,12 +145,14 @@ class AttackAgent(base_agent.BaseAgent):
         killed_unit_score = obs.observation['score_cumulative'][5]
         killed_building_score = obs.observation['score_cumulative'][6]
         
+        
         current_state = np.zeros(20)
         current_state[0] = supply_depot_count
         current_state[1] = barracks_count
         current_state[2] = supply_limit
         current_state[3] = army_supply
-
+        
+        #Adding enemy's positions
         hot_squares = np.zeros(16)        
         enemy_y, enemy_x = (obs.observation['minimap'][_PLAYER_RELATIVE] == _PLAYER_HOSTILE).nonzero()
         for i in range(0, len(enemy_y)):

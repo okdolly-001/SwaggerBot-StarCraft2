@@ -152,6 +152,7 @@ class AttackAgent(base_agent.BaseAgent):
         current_state[2] = supply_limit
         current_state[3] = army_supply
         
+        # Reduce to 16 square state space
         #Adding enemy's positions
         hot_squares = np.zeros(16)        
         enemy_y, enemy_x = (obs.observation['minimap'][_PLAYER_RELATIVE] == _PLAYER_HOSTILE).nonzero()
@@ -159,6 +160,7 @@ class AttackAgent(base_agent.BaseAgent):
             y = int(math.ceil((enemy_y[i] + 1) / 16))
             x = int(math.ceil((enemy_x[i] + 1) / 16))
             
+            #if any coordinate contains an enemt unit the entire square is marked "hot"
             hot_squares[((y - 1) * 4) + (x - 1)] = 1
         
         if not self.base_top_left:

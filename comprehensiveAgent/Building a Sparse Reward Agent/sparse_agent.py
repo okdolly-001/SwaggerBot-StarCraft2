@@ -124,7 +124,6 @@ class SparseAgent(base_agent.BaseAgent):
         # will track the sequence position within a multistep action. 
         self.move_number = 0
         
-        # 
         if os.path.isfile(DATA_FILE + '.gz'):
             self.qlearn.q_table = pd.read_pickle(DATA_FILE + '.gz', compression='gzip')
         
@@ -250,7 +249,8 @@ class SparseAgent(base_agent.BaseAgent):
             self.move_number += 1
             
             smart_action, x, y = self.splitAction(self.previous_action)
-                
+            
+            
             if smart_action == ACTION_BUILD_SUPPLY_DEPOT:
                 if supply_depot_count < 2 and _BUILD_SUPPLY_DEPOT in obs.observation['available_actions']:
                     if self.cc_y.any():
@@ -275,6 +275,7 @@ class SparseAgent(base_agent.BaseAgent):
                 if _TRAIN_MARINE in obs.observation['available_actions']:
                     return actions.FunctionCall(_TRAIN_MARINE, [_QUEUED])
         
+            #Tell the barracks to train the marine.       
             elif smart_action == ACTION_ATTACK:
                 do_it = True
                 
@@ -294,7 +295,8 @@ class SparseAgent(base_agent.BaseAgent):
             self.move_number = 0
             
             smart_action, x, y = self.splitAction(self.previous_action)
-                
+            #send SCVs back to mineral patch. 
+            #this action is queued so it will be performed once the SCV has finished building the supply depot. 
             if smart_action == ACTION_BUILD_BARRACKS or smart_action == ACTION_BUILD_SUPPLY_DEPOT:
                 if _HARVEST_GATHER in obs.observation['available_actions']:
                     unit_y, unit_x = (unit_type == _NEUTRAL_MINERAL_FIELD).nonzero()

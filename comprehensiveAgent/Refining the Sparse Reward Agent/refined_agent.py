@@ -59,6 +59,7 @@ for mm_x in range(0, 64):
 # Stolen from https://github.com/MorvanZhou/Reinforcement-learning-with-tensorflow
 class QLearningTable:
     def __init__(self, actions, learning_rate=0.01, reward_decay=0.9, e_greedy=0.9):
+        
         self.actions = actions  # a list
         self.lr = learning_rate
         self.gamma = reward_decay
@@ -69,10 +70,12 @@ class QLearningTable:
     def choose_action(self, observation, excluded_actions=[]):
         self.check_state_exist(observation)
         
+        #We accept a list of invalid actions for the given state. 
         self.disallowed_actions[observation] = excluded_actions
         
         state_action = self.q_table.ix[observation, :]
         
+        #filter invalid actions from possible choices so the agent will not take an invalid action. 
         for excluded_action in excluded_actions:
             del state_action[excluded_action]
 
@@ -86,7 +89,9 @@ class QLearningTable:
             
         return action
 
+    
     def learn(self, s, a, r, s_):
+        #prevent the agent from learning any time the action does not alter the state. 
         if s == s_:
             return
         
@@ -97,6 +102,7 @@ class QLearningTable:
         
         s_rewards = self.q_table.ix[s_, :]
         
+        #filter the invalid actions as their rewards never change. 
         if s_ in self.disallowed_actions:
             for excluded_action in self.disallowed_actions[s_]:
                 del s_rewards[excluded_action]

@@ -124,6 +124,7 @@ class SparseAgent(base_agent.BaseAgent):
         
         return [x + x_distance, y + y_distance]
     
+    #Will convert absolute x and y values based on the location of agent base 
     def transformLocation(self, x, y):
         if not self.base_top_left:
             return [64 - x, 64 - y]

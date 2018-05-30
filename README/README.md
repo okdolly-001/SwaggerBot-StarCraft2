@@ -1,6 +1,10 @@
 # StarCraft II Project
 
-Feel free to edit.
+## Week eight-nine 
+
+1. Resources to learn about Deep Recurrent Q-Network [https://medium.com/emergent-future/simple-reinforcement-learning-with-tensorflow-part-6-partial-observability-and-deep-recurrent-q-68463e9aeefc]
+
+
 
 #### Week six : 5.10-5.17
 

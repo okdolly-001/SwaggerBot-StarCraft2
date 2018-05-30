@@ -2,6 +2,11 @@ import pickle
 import numpy as np
 from pprint import pprint
 
+# to run this file in command line:
+# python
+# p = pickle.load(open("preped_data.pkl","rb"))
+# p
+
 units = [	'Armory', 
 			'Barracks', 
 			'Factory', 
@@ -109,7 +114,7 @@ for k, game in enumerate(games):
 				for item in win_game[label]:
 					if len(item) == 3 and item[1] == '+' and item[2] in units:
 						mapped = mapped_units[item[2]]
-						new_item = (item[0],) + (mapped,) + (label,)
+						new_item = (item[0],) + (mapped,) + (label,) # correct training output mapping
 						temp.append(new_item)
 					elif len(item) == 2:
 						new_item = item + (label,)
@@ -122,6 +127,7 @@ for k, game in enumerate(games):
 		#count = 0
 		x = []
 		y = []
+		# get 2nd recent n most recent state preceding a non NO_OP
 		for timestep in temp:
 			if timestep[2] in terran_x:
 				state[mapped_states[timestep[2]]] = timestep[1]
@@ -129,7 +135,7 @@ for k, game in enumerate(games):
 				##print(state)
 				##print('--->', timestep)
 				x.append(state)
-				y.append([timestep[1], timestep[2]])
+				y.append([timestep[1], timestep[2]]) # 0 - time frame 1 - unit selection 2 - action/event
 				#count += 1
 		x = np.asarray(x)
 		y = np.asarray(y)

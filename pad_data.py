@@ -4,6 +4,11 @@ from prep_data import units, terran_x, terran_y, dict_map
 
 
 def pad_and_batch(data, batch_size=50):
+	"""
+		after you pickle into a data obj, run new_data = pad_and_batch(data)
+		
+		returns: an array of numpy 2D arrays of size (batch_n, batch_size, n_features)
+	"""
 	temp = []
 	for d in data:
 		x = d[0]

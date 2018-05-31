@@ -149,3 +149,6 @@ print(len(victories))
 
 with open('preped_data.pkl', 'wb') as prep:
 	pickle.dump(victories, prep)
+
+
+	

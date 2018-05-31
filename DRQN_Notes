@@ -1,0 +1,52 @@
+Notes on Deep Recurrent Q Network 
+
+Deep Q network is built on one simple layer of Q-network. In orde to go from Q-Network to DQN we have to add:
+
+1) Going from a single-layer network to a multi-layer convolutional network. 
+2) Implementing Experience Replay, which will allow our network to train itself using stored memories from it’s experience.
+3) Utilizing a second “target” network, which we will use to compute target Q-values during our updates.
+
+
+1: Utilize convolutional layer 
+
+In Tensorflow, we can utilize the tf.contrib.layers.convolution2d function to easily create a convolutional layer. 
+
+-> convolution_layer = tf.contrib.layers.convolution2d(inputs,num_outputs,kernel_size,stride,padding)
+
+2: Adding experience Replay
+
+  This allows network to learn from more varied past experiences. 
+  
+3: Separate Target Netwok 
+  This is used to generate the target -Q values that will be used to compute the loss for every action during training. 
+  
+  
+  But as we have limited experience Data, we will apply Deep Recurrent Q-Networks
+   
+  The main question is How can we build a neural agent which still functions well in a partially observable world? 
+  The key is to give the agent a capacity for temporal integration of observations. Which can be accomplished 
+  using a recurrent block in our neural agent. By doing so we can pass the agent single frames of the environment and the network 
+  will be able to change its outpur depending on the temporal pattern of observations it receives. 
+  
+  
+  Now in order to change DQN model to DRQN, we will need to add these changes 
+ 
+ 
+ 1:  We will insert a LSTM recurrent cell between the output of the last convolutional layer and the input into the split between the 
+    Value and Advantage streams. 
+ 2: Adjust the way our experience buffer stores memories. Instead of training on random batches of experience, draw traces of experience of a given length. 
+ 3: Instead of sending all the gradients backwards when training their agent, sent only the last half of the gradients for a given trace.
+ 
+ 
+ By allowing for a temporal integration of information, the agent learns a sense of spatial location that is able to augment its observation at any moment, 
+ and allow the agent to receive a larger reward each episode.
+ 
+ 
+ 
+ 
+ Reference and resources: 
+ https://medium.com/emergent-future/simple-reinforcement-learning-with-tensorflow-part-6-partial-observability-and-deep-recurrent-q-68463e9aeefc
+ https://www.youtube.com/watch?v=9zhrxE5PQgY
+ https://colah.github.io/posts/2015-08-Understanding-LSTMs/
+ 
+ 

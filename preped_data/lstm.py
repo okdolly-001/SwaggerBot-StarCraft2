@@ -10,6 +10,20 @@
 # it is important to note that current_batch_of_words does not correspond to a "sentence" of words. 
 # Every word in a batch should correspond to a time t. TensorFlow will automatically sum the gradients of each batch for you.
 
+words_in_dataset = []
+[0,  1,    2,  3,     4]
+["The", "brown", "fox", "is", "quick"]
+["The", "red", "fox", "jumped", "high"]
+
+words_in_dataset[0] = ["The", "brown"]
+words_in_dataset[1] = ["The", "brown"]
+words_in_dataset[2] = ["The", "brown"]
+words_in_dataset[3] = ["The", "brown"]
+words_in_dataset[4] = ["The", "brown"]
+batch_size = 2, 
+time_steps = 5
+
+
 words_in_dataset = tf.placeholder(tf.float32, [time_steps, batch_size, num_features])
 lstm = tf.contrib.rnn.BasicLSTMCell(lstm_size)
 # Initial state of the LSTM memory.

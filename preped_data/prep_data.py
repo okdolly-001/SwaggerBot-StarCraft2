@@ -112,8 +112,9 @@ if __name__ == '__main__':
 							mapped = mapped_units[item[2]]
 							new_item = (item[0],) + (mapped,) + (label,)
 							temp.append(new_item)
-						elif len(item) == 2:
-							new_item = item + (label,)
+						## commit: added condition to restrict pass of negatives
+						elif len(item) == 2 and item[1] >= 0:
+							new_item = item + (label,) 
 							temp.append(new_item)
 
 			temp = sorted(temp, key= lambda k: k[0])

@@ -38,4 +38,15 @@ In Tensorflow, we can utilize the tf.contrib.layers.convolution2d function to ea
  3: Instead of sending all the gradients backwards when training their agent, sent only the last half of the gradients for a given trace.
  
  
+ By allowing for a temporal integration of information, the agent learns a sense of spatial location that is able to augment its observation at any moment, 
+ and allow the agent to receive a larger reward each episode.
+ 
+ 
+ 
+ 
+ Reference and resources: 
+ https://medium.com/emergent-future/simple-reinforcement-learning-with-tensorflow-part-6-partial-observability-and-deep-recurrent-q-68463e9aeefc
+ https://www.youtube.com/watch?v=9zhrxE5PQgY
+ https://colah.github.io/posts/2015-08-Understanding-LSTMs/
+ 
  

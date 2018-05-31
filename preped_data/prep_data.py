@@ -2,11 +2,6 @@ import pickle
 import numpy as np
 from pprint import pprint
 
-# to run this file in command line:
-# python
-# p = pickle.load(open("preped_data.pkl","rb"))
-# p
-
 units = [	'Armory', 
 			'Barracks', 
 			'Factory', 
@@ -91,61 +86,60 @@ def dict_map(itr, oh):
         TEMP[a] = i+oh
     return TEMP
 
-with open('data.pkl', 'rb') as d:
-	data = pickle.load(d)
-	games = data['games']
-	del data
+if __name__ == '__main__':
+	with open('data.pkl', 'rb') as d:
+		data = pickle.load(d)
+		games = data['games']
+		del data
 
-units = sorted(units)
+	units = sorted(units)
 
-mapped_units = dict_map(units, 1)
-##for a in sorted(mapped_units):
-##	print(a, mapped_units[a])
-victories = []
-for k, game in enumerate(games):
-	print('### working on game {} of {}'.format(k, len(games)))
-	win_race = game['Win'][2]
-	if win_race == 'Terran':
-		win_game = game['Win'][4]
-		local_labels = list(win_game.keys())
-		temp = []
-		for label in local_labels:
-			if label in terran_x or label in terran_y:
-				for item in win_game[label]:
-					if len(item) == 3 and item[1] == '+' and item[2] in units:
-						mapped = mapped_units[item[2]]
-						new_item = (item[0],) + (mapped,) + (label,) # correct training output mapping
-						temp.append(new_item)
-					elif len(item) == 2:
-						new_item = item + (label,)
-						temp.append(new_item)
+	mapped_units = dict_map(units, 1)
+	##for a in sorted(mapped_units):
+	##	print(a, mapped_units[a])
+	victories = []
+	for k, game in enumerate(games):
+		win_race = game['Win'][2]
+		if win_race == 'Terran':
+			print('### working on game {} of {}'.format(k, len(games)))
+			win_game = game['Win'][4]
+			local_labels = list(win_game.keys())
+			temp = []
+			for label in local_labels:
+				if label in terran_x or label in terran_y:
+					for item in win_game[label]:
+						if len(item) == 3 and item[1] == '+' and item[2] in units:
+							mapped = mapped_units[item[2]]
+							new_item = (item[0],) + (mapped,) + (label,)
+							temp.append(new_item)
+						elif len(item) == 2:
+							new_item = item + (label,)
+							temp.append(new_item)
 
-		temp = sorted(temp, key= lambda k: k[0])
-		state = [0]*len(terran_x)
-		mapped_states = dict_map(terran_x, 0)
+			temp = sorted(temp, key= lambda k: k[0])
+			state = list([0]*len(terran_x))
+			mapped_states = dict_map(terran_x, 0)
 
-		#count = 0
-		x = []
-		y = []
-		# get 2nd recent n most recent state preceding a non NO_OP
-		for timestep in temp:
-			if timestep[2] in terran_x:
-				state[mapped_states[timestep[2]]] = timestep[1]
-			elif timestep[2] in terran_y and timestep[0] != 0:
-				##print(state)
-				##print('--->', timestep)
-				x.append(state)
-				y.append([timestep[1], timestep[2]]) # 0 - time frame 1 - unit selection 2 - action/event
-				#count += 1
-		x = np.asarray(x)
-		y = np.asarray(y)
-		victories.append((x, y))
-		#print(count)
+			x = []
+			y = []
+			for timestep in temp:
+				if timestep[2] in terran_x:
+					state[mapped_states[timestep[2]]] = timestep[1]
+				elif timestep[2] in terran_y and timestep[0] != 0:
+					## commit: state was being updated per itr due to same name append
+					## copy() makes a new instance of the same list
+					x.append(state.copy())
+					y.append([timestep[1], timestep[2]])
+					
+			x = np.asarray(x)
+			y = np.asarray(y)
+			victories.append((x, y))
+			
 
-		##for p in sorted(mapped_states):
-			##print(p, mapped_states[p])
 
-print(len(victories))
+	print('XXX collected', len(victories), 'victories total!')
 
-with open('preped_data.pkl', 'wb') as prep:
-	pickle.dump(victories, prep)
+	with open('preped_data.pkl', 'wb') as prep:
+		pickle.dump(victories, prep)
+	with open('preped_maps.pkl', 'wb') as maps:
+		pickle.dump(mapped_units, maps)

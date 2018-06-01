@@ -66,7 +66,7 @@ class DQNAgent(base_agent.BaseAgent):
         # Maximum a posterori rule, pick action with highest probability
         action = self.select_action(state, self.episodes)
 
-        if action == 0:
+        if can_move and action == 0:
             function_action = _MOVE_SCREEN
             target = [_NOT_QUEUED, position]
         elif action == 1:
@@ -140,7 +140,7 @@ class DQNAgent(base_agent.BaseAgent):
 
         # Compute Huber loss
         loss = F.smooth_l1_loss(state_action_values,
-                                expected_state_action_values.unsqueeze(1))
+                                expected_state_action_values.view(64, 1))
 
         # Optimize the model
         optimizer.zero_grad()

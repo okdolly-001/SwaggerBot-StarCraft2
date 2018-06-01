@@ -2,11 +2,6 @@
 
 Feel free to edit.
 
-Aria:
-
-1. Resources to learn about Deep Recurrent Q-Network [https://medium.com/emergent-future/simple-reinforcement-learning-with-tensorflow-part-6-partial-observability-and-deep-recurrent-q-68463e9aeefc]
-
-
 #### Week six : 5.10-5.17
 
 ##### Assume you have already completed all the tasks in Week one. Parkinson's law says that a task takes as much time as you allocate for it. Deadline is a productivity booster because we don't check the phone every 20 minutes or hang out with friends between now and the deadline. Aim to complete the task less than the estimated time. Sucess = Focus * Time

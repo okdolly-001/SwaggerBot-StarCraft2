@@ -6,7 +6,7 @@ Post what you did and how we can use your code here.
 
 
 May 31
-1. Delete preped data and parsed replay because we hit github storage upper limit. [Download here in Google drive](https://drive.google.com/drive/folders/1-CnHdD1T8P09XixGYlDI_8pSs4iSZQN5?usp=sharing) =
+1. Delete preped data and parsed replay because we hit github storage upper limit. [Download here in Google drive](https://drive.google.com/drive/folders/1-CnHdD1T8P09XixGYlDI_8pSs4iSZQN5?usp=sharing) .
 
 2. Upload pytorch_dqn_agent. Run it ./run_agent.sh. I am still fixing bugs, but it is pretty promising. I tried the 
 author's [other two agents](https://github.com/wohlert/starcraft-agent-pytorch) and both worked. 

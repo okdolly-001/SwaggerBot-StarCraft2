@@ -4,10 +4,9 @@ import time
 import torch
 import torch.optim as optim
 import torch.nn.functional as F
-from torch.autograd import Variable
 from pysc2.agents import base_agent
 from pysc2.lib import actions, features
-
+import numpy as np
 from dqn import DQN, ReplayMemory, Transition
 
 BATCH_SIZE = 64
@@ -64,11 +63,8 @@ class DQNAgent(base_agent.BaseAgent):
 
         # Send states through model, collect
         # [1, n_actions] tensor of actions
-        action_tensor = self.select_action(state, self.episodes)
-
         # Maximum a posterori rule, pick action with highest probability
-        _, action = torch.max(action_tensor.data, 1)
-        action = int(action)
+        action = self.select_action(state, self.episodes)
 
         if action == 0:
             function_action = _MOVE_SCREEN
@@ -107,23 +103,21 @@ class DQNAgent(base_agent.BaseAgent):
 
     def optimize(self, batch):
         # Compute a mask of non-final states and concatenate the batch elements
-        non_final_mask = torch.ByteTensor(
-            tuple(map(lambda s: s is not None, batch.next_state)))
+        non_final_mask = torch.tensor(
+            tuple(map(lambda s: s is not None, batch.next_state)), dtype=torch.uint8)
 
         # We don't want to backprop through the expected action values and volatile
         # will save us on temporarily changing the model parameters'
         # requires_grad to False!
-        non_final_next_states = Variable(torch.cat([s for s in batch.next_state
-                                                    if s is not None]),
-                                         volatile=True)
+        non_final_next_states = torch.cat([s for s in batch.next_state
+                                           if s is not None])
 
-        state_batch = Variable(
-            torch.cat(batch.state).view(-1, self.model.linear1.in_features))
-        action_batch = Variable(
-            torch.cat((torch.LongTensor([batch.action]), ), 0)).view(-1, 1)
+        state_batch = torch.cat(batch.state)
+        action_batch = torch.cat(batch.action)
 
-        rewards = list(map(int, batch.reward))
-        reward_batch = Variable(torch.cat([torch.FloatTensor(rewards)], 0))
+        reward_batch = torch.from_numpy(
+            np.array([batch.reward], dtype=np.int64)).float()
+        reward_batch = torch.cat((reward_batch,))
 
         # Compute Q(s_t, a) - the model computes Q(s_t), then we select the
         # columns of actions taken
@@ -131,15 +125,14 @@ class DQNAgent(base_agent.BaseAgent):
         state_action_values = self.model(state_batch).gather(1, action_batch)
 
         # Compute V(s_{t+1}) for all next states.
-        next_state_values = Variable(
-            torch.zeros(BATCH_SIZE).type(torch.Tensor))
-        next_state_values[non_final_mask], _ = model(
-            non_final_next_states).max(1)
+        next_state_values = torch.zeros(BATCH_SIZE)
+        next_state_values[non_final_mask] = model(
+            non_final_next_states).max(1)[0].detach()
 
         # Now, we don't want to mess up the loss with a volatile flag, so let's
         # clear it. After this, we'll just end up with a Variable that has
         # requires_grad=False
-        next_state_values.volatile = False
+        # next_state_values.volatile = False
 
         # Compute the expected Q values
         expected_state_action_values = (
@@ -147,7 +140,7 @@ class DQNAgent(base_agent.BaseAgent):
 
         # Compute Huber loss
         loss = F.smooth_l1_loss(state_action_values,
-                                expected_state_action_values)
+                                expected_state_action_values.unsqueeze(1))
 
         # Optimize the model
         optimizer.zero_grad()
@@ -163,10 +156,7 @@ class DQNAgent(base_agent.BaseAgent):
 
         if random.random() > epsilon:
             # Return action from model
-            state = Variable(state, volatile=True)
-            actions = self.model(state).view(1, -1)
+            with torch.no_grad():
+                return self.model(state).max(1)[1].view(1, 1)
         else:
-            actions = Variable(torch.randn(model.linear3.out_features))
-            actions = F.softmax(actions, -1).view(1, -1)
-
-        return actions
+            return torch.tensor([[random.randrange(2)]], dtype=torch.long)

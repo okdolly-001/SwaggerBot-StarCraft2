@@ -1,0 +1,25 @@
+
+List of existing agents and their features which we could implement in our agent:
+
+1. Advantage Actor-Ctitic agent baseline for pysc2 environment. 
+    https://github.com/simonmeister/pysc2-rl-agents
+    Understanding how to 
+    
+        
+2. UAlbertaBot is a StarCraft C++ bot
+  - It makes use of Build order planning that is based on heuristic search. 
+  - Real time Simulation - All battles UAlbertaBot encounters are first run through SparCraft combat simultaion system. I
+    If the outcome of this simulation is positive then it continues toward the enmy base.
+    If the outcome is negative, retreat toward own base. 
+  - Stratedy Selection based on results of previous matches. 
+  
+  Understanding how to implement build order for protoss: https://github.com/davechurchill/ualbertabot/wiki/UAlbertaBot-Build-Orders
+  
+
+3. Agent that uses all features maps and structured information to predict actions via A3C algorithm. 
+  - Good code to understand lightwieght framework for deep reinforcement learning that uses asynchrounous gradient descent for optimization of deep neural network controllers. 
+  - Related paper: https://arxiv.org/pdf/1602.01783.pdf 
+  - https://github.com/xhujoy/pysc2-agents/blob/master/agents/a3c_agent.py
+  
+  
+4. 

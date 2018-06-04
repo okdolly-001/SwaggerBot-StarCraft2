@@ -49,7 +49,7 @@ _TRAIN_MEDIVAC = actions.FUNCTIONS.Train_Medivac_quick.id
 _TRAIN_RAVEN = actions.FUNCTIONS.Train_Raven_quick.id
 _TRAIN_REAPER = actions.FUNCTIONS.Train_Reaper_quick.id
 _TRAIN_SCV = actions.FUNCTIONS.Train_SCV_quick.id
-_TRAIN_SieGE_TANK = actions.FUNCTIONS.Train_SiegeTank_quick.id
+_TRAIN_SIEGE_TANK = actions.FUNCTIONS.Train_SiegeTank_quick.id
 _TRAIN_VIKING = actions.FUNCTIONS.Train_VikingFighter_quick.id
 _TRAIN_THOR = actions.FUNCTIONS.Train_Thor_quick.id
 
@@ -182,10 +182,43 @@ unit_dict = {
 	'engineeringbay': _ENGINEERING_BAY,
 	'commandcenter': _COMMAND_CENTER,
 	'barracks': _BARRACKS,
-	'armory': _ARMORY
+	'armory': _ARMORY,
 	'reactor': _REACTOR
 }
 
+build_to_action = {'barracks':_BUILD_BARRACKS, 'supplydepot':_BUILD_SUPPLY_DEPOT, 'commandcenter':_BUILD_COMMAND_CENTER, 'refinery':_REFINERY,
+				'ghostacademy':_BUILD_GHOST_ACADEMY, 'factory':_BUILD_FACTORY, 'armory':_BUILD_ARMORY, 'starport':_BUILD_STARPORT, 
+				'fusioncore':_BUILD_FUSION_CORE}
+
+unit_to_action = {'banshee':_TRAIN_BANSHEE,
+'battlecruiser':_TRAIN_BATTLE_CRUISER,
+'cyclone':_TRAIN_CYCLONE,
+'ghost':_TRAIN_GHOST,
+'hellion':_TRAIN_HELLION,
+'liberator':_TRAIN_LIBERATOR,
+'marauder':_TRAIN_MARAUDER,
+'marine':_TRAIN_MARINE,
+'medivac':_TRAIN_MEDIVAC,
+'raven':_TRAIN_RAVEN,
+'reaper':_TRAIN_REAPER,
+'scv':_TRAIN_SCV,
+'siegetank':_TRAIN_SIEGE_TANK,
+'viking':_TRAIN_VIKING,
+'thor':_TRAIN_THOR
+}
+
+build_with_SCV = ['barracks', 'supplydepot', 'commandcenter', 'refinery',
+				'ghostacademy', 'factory', 'armory', 'starport', 'fusioncore']
+
+starport_units = ['banshee', 'battlecruiser', 'liberator', 'medivac', 'raven', 'viking']
+
+barracks_units = ['ghost', 'marauder', 'marine', 'reaper']
+
+factory_units = ['cyclone', 'hellion', 'siegetank', 'thor']
+
+Buildings = [_BARRACKS, _ARMORY, _REACTOR, _COMMAND_CENTER, _ENGINEERING_BAY, _FACTORY,
+			_FUSION_CORE, _GHOST_ACADEMY, _REFINERY, _STARPORT, _SUPPLY_DEPOT, _TECHLAB, 
+			_NEUTRAL_MINERAL_FIELD, _NEUTRAL_VESPENE_GEYSER]
 
 smart_actions = [	
 	ACTION_DO_NOTHING, 			ACTION_T_BANSHEE,			ACTION_RETREAT,

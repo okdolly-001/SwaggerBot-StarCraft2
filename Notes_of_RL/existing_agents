@@ -3,7 +3,7 @@ List of existing agents and their features which we could implement in our agent
 
 1. Advantage Actor-Ctitic agent baseline for pysc2 environment. 
     https://github.com/simonmeister/pysc2-rl-agents
-    Understanding how to 
+    Understanding how to implement reinforcement learning with pysc2 environment. 
     
         
 2. UAlbertaBot is a StarCraft C++ bot
@@ -22,4 +22,13 @@ List of existing agents and their features which we could implement in our agent
   - https://github.com/xhujoy/pysc2-agents/blob/master/agents/a3c_agent.py
   
   
-4. 
+4. Agent that collects Mineral Shards with Deep Q network 
+   - understanding preprocessing of replay data: replay_mineral.py
+   - create action functions: defeat_zerglings/demo_agent.py
+   - https://github.com/chris-chris/pysc2-examples
+   
+5. Series of tutorials that go step by step on how to build a refined bot
+  - https://chatbotslife.com/building-a-basic-pysc2-agent-b109cde1477c
+  - https://github.com/skjb/pysc2-tutorial
+  
+  

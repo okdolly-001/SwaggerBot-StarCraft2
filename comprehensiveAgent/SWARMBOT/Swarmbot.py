@@ -309,6 +309,7 @@ class SwarmbotAgent(base_agent.BaseAgent):
 		self.states_happened.append((self.prev_state, self.move_number))
 		self.actions_taken.append((_NO_OP, []))
 		return actions.FunctionCall(_NO_OP, [])
+	
 
 
 

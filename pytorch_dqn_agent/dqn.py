@@ -29,7 +29,7 @@ class ReplayMemory(object):
 
 class DQN(nn.Module):
     def __init__(self, n_states, n_actions):
-        super(DQN, self).__init__()
+        super().__init__()
         self.linear1 = nn.Linear(n_states, 64)
         self.batchn1 = nn.BatchNorm1d(64)
         self.linear2 = nn.Linear(64, 64)

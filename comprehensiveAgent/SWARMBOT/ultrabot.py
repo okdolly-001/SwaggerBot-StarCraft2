@@ -15,10 +15,246 @@ from pysc2.lib import features
 ## labels for unit names, and thier 
 ## ids didn't want to have all those
 ## assignments in the bot file
-from tags import *
+#from tags import *
 
 ## given two arrays of coords returns number of pixels per unit.
 from countUnits import count_units
+
+from pysc2.lib import actions
+from pysc2.lib import features
+
+_NOT_QUEUED = [0]
+_QUEUED = [1]
+_SELECT_ALL = [2]
+
+_PLAYER_SELF = 1
+_PLAYER_HOSTILE = 4
+_ARMY_SUPPLY = 5
+
+_PLAYER_RELATIVE = features.SCREEN_FEATURES.player_relative.index
+_UNIT_TYPE = features.SCREEN_FEATURES.unit_type.index
+_PLAYER_ID = features.SCREEN_FEATURES.player_id.index
+
+_BUILD_ARMORY = actions.FUNCTIONS.Build_Armory_screen.id
+_BUILD_BARRACKS = actions.FUNCTIONS.Build_Barracks_screen.id
+_BUILD_COMMAND_CENTER = actions.FUNCTIONS.Build_CommandCenter_screen.id
+_BUILD_ENGINEERING_BAY = actions.FUNCTIONS.Build_EngineeringBay_screen.id
+_BUILD_FACTORY = actions.FUNCTIONS.Build_Factory_screen.id
+_BUILD_FUSION_CORE = actions.FUNCTIONS.Build_FusionCore_screen.id
+_BUILD_GHOST_ACADEMY = actions.FUNCTIONS.Build_GhostAcademy_screen.id
+_BUILD_REFINERY = actions.FUNCTIONS.Build_Refinery_screen.id
+_BUILD_STARPORT = actions.FUNCTIONS.Build_Starport_screen.id
+_BUILD_SUPPLY_DEPOT = actions.FUNCTIONS.Build_SupplyDepot_screen.id
+## techlab is an add-on to barracks, factory, or starport
+## used to create (marauders, ghosts), (Seige Tanks, Thors),
+## (Ravens, banshees, and battlecruisers) respectively
+## figuring out which to add on to is key... (not sure whether to use screen or quick)
+_BUILD_TECHLAB = actions.FUNCTIONS.Build_TechLab_screen.id
+_BUILD_TECHLAB_BARRACKS = actions.FUNCTIONS.Build_TechLab_Barracks_quick.id
+_BUILD_TECHLAB_FACTORY = actions.FUNCTIONS.Build_TechLab_Factory_quick.id
+_BUILD_TECHLAB_STARPORT = actions.FUNCTIONS.Build_TechLab_Starport_quick.id
+## same idea as a techlab 
+_BUILD_REACTOR = actions.FUNCTIONS.Build_Reactor_screen.id
+_BUILD_REACTOR_BARRACKS = actions.FUNCTIONS.Build_Reactor_Barracks_quick.id
+_BUILD_REACTOR_FACTORY = actions.FUNCTIONS.Build_Reactor_Factory_quick.id
+_BUILD_REACTOR_STARPORT = actions.FUNCTIONS.Build_Reactor_Starport_quick.id
+
+_TRAIN_BANSHEE = actions.FUNCTIONS.Train_Banshee_quick.id
+_TRAIN_BATTLE_CRUISER = actions.FUNCTIONS.Train_Battlecruiser_quick.id
+_TRAIN_CYCLONE = actions.FUNCTIONS.Train_Cyclone_quick.id
+_TRAIN_GHOST = actions.FUNCTIONS.Train_Ghost_quick.id
+_TRAIN_HELLION = actions.FUNCTIONS.Train_Hellion_quick.id
+_TRAIN_LIBERATOR = actions.FUNCTIONS.Train_Liberator_quick.id
+_TRAIN_MARAUDER = actions.FUNCTIONS.Train_Marauder_quick.id
+_TRAIN_MARINE = actions.FUNCTIONS.Train_Marine_quick.id
+_TRAIN_MEDIVAC = actions.FUNCTIONS.Train_Medivac_quick.id
+_TRAIN_RAVEN = actions.FUNCTIONS.Train_Raven_quick.id
+_TRAIN_REAPER = actions.FUNCTIONS.Train_Reaper_quick.id
+_TRAIN_SCV = actions.FUNCTIONS.Train_SCV_quick.id
+_TRAIN_SIEGE_TANK = actions.FUNCTIONS.Train_SiegeTank_quick.id
+_TRAIN_VIKING = actions.FUNCTIONS.Train_VikingFighter_quick.id
+_TRAIN_THOR = actions.FUNCTIONS.Train_Thor_quick.id
+
+_NO_OP = actions.FUNCTIONS.no_op.id
+_SELECT_POINT = actions.FUNCTIONS.select_point.id
+_SELECT_ARMY = actions.FUNCTIONS.select_army.id
+_ATTACK_MINIMAP = actions.FUNCTIONS.Attack_minimap.id
+_HARVEST_GATHER = actions.FUNCTIONS.Harvest_Gather_screen.id
+
+_NEUTRAL_VESPENE_GEYSER = 342
+_NEUTRAL_MINERAL_FIELD = 341
+
+_ARMORY = 29
+_BARRACKS = 21
+_FACTORY = 27
+_FUSION_CORE = 30
+_GHOST_ACADEMY = 26
+_STARPORT = 28
+_COMMAND_CENTER = 18
+_ENGINEERING_BAY = 22
+_REFINERY = 20
+_SUPPLY_DEPOT = 19
+_TECHLAB = 5
+_BANSHEE = 55
+_BATTLE_CRUISER = 57
+_CYCLONE = 692
+_GHOST = 50
+_HELLION = 53
+_LIBERATOR = 689
+_MARAUDER = 51
+_MARINE = 48
+_MEDIVAC = 54
+_RAVEN = 56
+_REAPER = 49
+_SIEGE_TANK = 33
+_THOR = 52
+## viking can transform to
+## ASSAULT mode (34)
+_VIKING = 35
+_SCV = 45
+_REACTOR = 6
+
+## there seems to be a bug with pysc2
+## where building reactors and techlabs
+## to specific buildings is not available
+## must check how to build these units in
+## the desired building. Might fist implement
+## something like selecting the building first
+## then make the general build command for each
+_REACTOR_BARRACKS = 38
+_REACTOR_FACTORY = 40
+_REACTOR_STARPORT = 42
+_TECHLAB_BARRACKS = 37
+_TECHLAB_FACTORY = 39
+_TECHLAB_STARPORT = 41
+
+DATA_FILE = 'refined_agent_data'
+
+ACTION_DO_NOTHING = 'donothing'
+ACTION_ATTACK = 'attack'
+ACTION_RETREAT = 'retreat'
+
+ACTION_T_BANSHEE = 't_banshee'
+ACTION_T_BATTLECRUISER = 't_battlecruiser'
+ACTION_T_CYCLONE = 't_cyclone'
+ACTION_T_GHOST = 't_ghost'
+ACTION_T_HELLION = 't_hellion'
+ACTION_T_LIBERATOR = 't_liberator'
+ACTION_T_MARAUDER = 't_marauder'
+ACTION_T_MARINE = 't_marine'
+ACTION_T_MEDIVAC = 't_medivac'
+ACTION_T_RAVEN = 't_raven'
+ACTION_T_REAPER = 't_reaper'
+ACTION_T_SIEGETANK = 't_siegetank'
+ACTION_T_SCV = 't_scv'
+ACTION_T_VIKING = 't_viking'
+ACTION_T_THOR = 't_thor'
+
+ACTION_B_ARMORY = 'b_armory'
+ACTION_B_BARRACKS = 'b_barracks'
+ACTION_B_COMMANDCENTER = 'b_commandcenter'
+ACTION_B_ENGINEERINGBAY = 'b_engineeringbay'
+ACTION_B_FACTORY = 'b_factory'
+ACTION_B_FUSIONCORE ='b_fusioncore'
+ACTION_B_GHOSTACADEMY = 'b_ghostacademy'
+ACTION_B_REFINERY = 'b_refinery'
+ACTION_B_STARPORT = 'b_starport'
+ACTION_B_SUPPLYDEPOT = 'b_supplydepot'
+ACTION_B_TECHLAB_BARRACKS = 'b_techlab_barracks'
+ACTION_B_TECHLAB_STARPORT = 'b_techlab_starport'
+ACTION_B_TECHLAB_FACTORY = 'b_techlab_factory'
+ACTION_B_REACTOR_BARRACKS = 'b_reactor_barracks'
+ACTION_B_REACTOR_STARPORT = 'b_reactor_starport'
+ACTION_B_REACTOR_FACTORY = 'b_reactor_factory'
+
+units_capable_of_attacking = [
+	'banshee',		'battlecruiser',
+	'cyclone',		'ghost',
+	'hellion',		'liberator',
+	'marauder',		'marine',
+	'medivac',		'raven',
+	'reaper', 		'siegetank',
+	'scv',	'viking',	'thor'
+]
+
+
+unit_dict = {
+	'banshee': _BANSHEE,
+	'battlecruiser': _BATTLE_CRUISER,
+	'cyclone': _CYCLONE,
+	'ghost': _GHOST,
+	'hellion': _HELLION,
+	'liberator': _LIBERATOR,
+	'marauder': _MARAUDER,
+	'marine': _MARINE,
+	'medivac': _MEDIVAC,
+	'raven': _RAVEN,
+	'reaper': _REAPER,
+	'siegetank': _SIEGE_TANK,
+	'scv': _SCV,
+	'viking': _VIKING,
+	'thor': _THOR,
+	'techlab': _TECHLAB,
+	'supplydepot': _SUPPLY_DEPOT, 
+	'starport': _STARPORT,
+	'refinery': _REFINERY,
+	'ghostacademy': _GHOST_ACADEMY,
+	'fusioncore': _FUSION_CORE,
+	'factory': _FACTORY,
+	'engineeringbay': _ENGINEERING_BAY,
+	'commandcenter': _COMMAND_CENTER,
+	'barracks': _BARRACKS,
+	'armory': _ARMORY,
+	'reactor': _REACTOR
+}
+
+build_to_action = {'barracks':_BUILD_BARRACKS, 'supplydepot':_BUILD_SUPPLY_DEPOT, 'commandcenter':_BUILD_COMMAND_CENTER, 'refinery':_REFINERY,
+				'ghostacademy':_BUILD_GHOST_ACADEMY, 'factory':_BUILD_FACTORY, 'armory':_BUILD_ARMORY, 'starport':_BUILD_STARPORT, 
+				'fusioncore':_BUILD_FUSION_CORE}
+
+unit_to_action = {'banshee':_TRAIN_BANSHEE,
+'battlecruiser':_TRAIN_BATTLE_CRUISER,
+'cyclone':_TRAIN_CYCLONE,
+'ghost':_TRAIN_GHOST,
+'hellion':_TRAIN_HELLION,
+'liberator':_TRAIN_LIBERATOR,
+'marauder':_TRAIN_MARAUDER,
+'marine':_TRAIN_MARINE,
+'medivac':_TRAIN_MEDIVAC,
+'raven':_TRAIN_RAVEN,
+'reaper':_TRAIN_REAPER,
+'scv':_TRAIN_SCV,
+'siegetank':_TRAIN_SIEGE_TANK,
+'viking':_TRAIN_VIKING,
+'thor':_TRAIN_THOR
+}
+
+build_with_SCV = ['barracks', 'supplydepot', 'commandcenter', 'refinery',
+				'ghostacademy', 'factory', 'armory', 'starport', 'fusioncore']
+
+starport_units = ['banshee', 'battlecruiser', 'liberator', 'medivac', 'raven', 'viking']
+
+barracks_units = ['ghost', 'marauder', 'marine', 'reaper']
+
+factory_units = ['cyclone', 'hellion', 'siegetank', 'thor']
+
+Buildings = [_BARRACKS, _ARMORY, _REACTOR, _COMMAND_CENTER, _ENGINEERING_BAY, _FACTORY,
+			_FUSION_CORE, _GHOST_ACADEMY, _REFINERY, _STARPORT, _SUPPLY_DEPOT, _TECHLAB, 
+			_NEUTRAL_MINERAL_FIELD, _NEUTRAL_VESPENE_GEYSER]
+
+smart_actions = [	
+	ACTION_DO_NOTHING, 			ACTION_T_BANSHEE,			ACTION_RETREAT,
+	ACTION_T_BATTLECRUISER, 	ACTION_T_CYCLONE, 			ACTION_T_GHOST,
+	ACTION_T_HELLION, 			ACTION_T_LIBERATOR, 		ACTION_T_MARAUDER,
+	ACTION_T_MARINE, 			ACTION_T_MEDIVAC,			ACTION_T_RAVEN,
+	ACTION_T_REAPER,			ACTION_T_SIEGETANK, 		ACTION_T_SCV,
+	ACTION_T_VIKING,			ACTION_T_THOR,				ACTION_B_ARMORY,
+	ACTION_B_BARRACKS,			ACTION_B_COMMANDCENTER,		ACTION_B_ENGINEERINGBAY,
+	ACTION_B_FACTORY,			ACTION_B_GHOSTACADEMY,		
+	ACTION_B_REFINERY,			ACTION_B_STARPORT,			ACTION_B_SUPPLYDEPOT,
+	ACTION_B_TECHLAB_FACTORY, 	ACTION_B_TECHLAB_STARPORT, 	ACTION_B_TECHLAB_BARRACKS,
+	ACTION_B_REACTOR_FACTORY, 	ACTION_B_REACTOR_STARPORT, 	ACTION_B_REACTOR_BARRACKS
+]
 
 ## adds attack <which> quadrant actions and with <which> attacking unit
 for mm_x in range(0, 64):
@@ -28,6 +264,78 @@ for mm_x in range(0, 64):
 		##		smart_actions.append(ACTION_ATTACK + '_' + str(mm_x - 16) + '_' + str(mm_y - 16) + u)
 		if (mm_x + 1) % 32 == 0 and (mm_y + 1) % 32 == 0:
 			smart_actions.append(ACTION_ATTACK + '_' + str(mm_x - 16) + '_' + str(mm_y - 16))
+
+class QLearningTable:
+	def __init__(self, actions, learning_rate=0.01, reward_decay=0.9, e_greedy=0.9):
+		self.round = 0
+		self.actions = actions
+		self.lr = learning_rate
+		self.gamma = reward_decay
+		self.epsilon = e_greedy
+		self.q_table = pd.DataFrame(columns=self.actions)
+		
+		
+		accum = open("acc_qtable.csv", "w+")
+		name = "qtable.csv"
+		if os.path.exists(name):
+			self.q_table = pd.DataFrame(columns=self.actions).from_csv(name)
+			#self.printTable()
+		else:
+			self.q_table = pd.DataFrame(columns=self.actions)
+
+
+	def save_csv(self, name):
+		self.round += 1
+		self.q_table.to_csv(name)
+		print("Saving")
+		accum_f = open("acc_qtable.csv", "w")
+		accum_f.write(str(self.q_table)+"\n")
+		accum_f.write("Round: "+str(self.round)+"\n")
+
+
+
+	def choose_action(self, observation):
+		self.check_state_exist(observation)
+		
+		if np.random.uniform() < self.epsilon:
+			# choose best action
+			state_action = self.q_table.ix[observation, :]
+			
+			# some actions have the same value
+			state_action = state_action.reindex(np.random.permutation(state_action.index))
+			
+			action = state_action.max()
+		else:
+			# choose random action
+			action = np.random.choice(self.actions)
+		return int(action)
+
+	def printTable(self):
+		print(self.q_table)
+		
+	def learn(self, s, a, r, s_):
+		self.check_state_exist(s_)
+		self.check_state_exist(s)
+
+		#q_predict = self.q_table.ix[s, a]
+		#q_target = r + self.gamma * self.q_table.ix[s_, :].max()
+		
+		# update
+		#self.q_table.ix[s, a] += self.lr * (q_target - q_predict)
+		if s_ != 'terminal':
+			q_target = r + self.gamma * self.q_table.ix[s_, :].max()
+		else:
+			q_target = r
+		
+		## update 
+		self.q_table.ix[s, a] += self.lr * (q_target - q_predict)
+
+	def check_state_exist(self, state):
+		if state not in self.q_table.index:
+			# append new state to q table
+
+			self.q_table = self.q_table.append(pd.Series([0] * len(self.actions), index=self.q_table.columns, name=state))
+			
 
 """
 	Main Agent Class:
@@ -45,14 +353,14 @@ for mm_x in range(0, 64):
 		of moves that it has done throughout periods of or the entirety of the game. The current state is being defined by
 		unit counts and global state evealuation of economy at the moment, we are also thinking of adding enemy info when 
 		visible, in order to learn better and adapt to enemy strategies.
-
 """
 class SwarmbotAgent(base_agent.BaseAgent):
 	def __init__(self):
 		super(SwarmbotAgent, self).__init__()
-
-		self.reward = 0 # uhm... a reward win or loss, [1, 0]
-		self.qlearn = None ## Nothing yet
+		self.round = 0 ## round number (games)
+		self.rewardFile = open('rewards.csv', 'a+')
+		self.rewardTotal = 0 # uhm... a reward win or loss, [1, 0]
+		self.qlearn = QLearningTable(actions=list(range(len(smart_actions))))
 		self.move_number = 0 ## what move in the smart action are we on
 		self.unit_sizes = {} ## pixel sizes of each unit used to compute counts
 		self.unit_coords = {} ## (x, y) coordinates for locating units
@@ -60,13 +368,43 @@ class SwarmbotAgent(base_agent.BaseAgent):
 		self.unit_types = None ## updated after every step with all units in the screen
 		self.base_top_left = None ## location of self
 		self.action_queue = deque() ## if an action has requirements, queue it for later
-		self.actions_taken = [] ## actions that were returned to the base agent
+		self.actions_taken = [(-1, [-1, -1])] ## actions that were returned to the base agent
 		self.states_happened = [] ## states that yielded an action at a certain step 
 		self.wait_2_count = deque() ## queues those units that require to be counted
 		self.point_selected = (None, None) ## point in the screen currently selected. 
 		self.depot_x = 5 ## starting x position used for finding locations for buildings
 		self.depot_y = 5 ## starting y position used for finding locations for buildings
 
+	def get_current_state(self, obs, hot_squares):
+		score_cumulative = list(obs.observation['score_cumulative'])
+		player_info = list(obs.observation['player'])
+		player_info = player_info[1:9] ## since we dont need player id or warpgate and larva counts 
+		temp = score_cumulative + player_info
+		for unit in list(unit_dict.values()):
+			if unit in self.unit_counts:
+				temp.append(self.unit_counts[unit])
+			else:
+				temp.append(0)
+		reversed_actions_taken = [self.actions_taken[i*-1][0] for i in range(1, len(self.actions_taken))]
+		if len(reversed_actions_taken) < 15: 
+			reversed_actions_taken = [0]*(15 - len(reversed_actions_taken)) + reversed_actions_taken
+		else:
+			reversed_actions_taken = reversed_actions_taken[:15]
+		temp = temp + reversed_actions_taken
+		temp.append(self.base_top_left)
+		temp = temp + list(hot_squares)
+		return temp
+
+
+
+	def reset(self):
+		super(SwarmbotAgent, self).reset()
+		self.round += 1
+		self.rewardFile = open("rewards.csv", "a+")
+		self.rewardFile.write(str(self.round)+","+str(self.rewardTotal)+"\n")
+		self.qlearn.save_csv("qtable.csv")
+		#self.qlearn.printTable()
+		#                      self.hold = 0
 
 	def transfromDistance(self, x, x_distance, y, y_distance):
 		"""
@@ -100,8 +438,11 @@ class SwarmbotAgent(base_agent.BaseAgent):
 			action, unit, attachment = action.split('_')
 			return (action, None, None, unit, attachment)
 		else:	## regular action (either build or train a unit)
-			action, unit = action.split('_')
-			return (action, None, None, unit, None)
+			if action == 'donothing':
+				return (None, None, None, None, None)
+			else:
+				action, unit = action.split('_')
+				return (action, None, None, unit, None)
 
 	## lent from https://github.com/jlboes/Starcraft-II-learning-bot/blob/master/src/scagent.py
 	## credit to the creator, before using, update the self.unit_types
@@ -222,6 +563,8 @@ class SwarmbotAgent(base_agent.BaseAgent):
 
 		if obs.last():
 			self.reward = obs.reward
+			self.qlearn.learn(str(self.previous_state), self.previous_action, reward, 'terminal')
+			self.reset()
 			self.prev_action = None
 			self.prev_state = None
 			self.move_number = 0
@@ -239,15 +582,15 @@ class SwarmbotAgent(base_agent.BaseAgent):
 			## applies initial counts and locations to command centers, vespene geysers and mineral fields
 			self.apply_counts()
 
+			self.current_state = []
+
 		if self.move_number == 0:
 			self.move_number += 1
-
-			## from obs and counts obtain the current state to be used in the qtable
 
 			## obtains locations at which the enemy would appear. 
 			hot_squares = np.zeros(4)
 			enemy_y, enemy_x = (obs.observation['minimap'][_PLAYER_RELATIVE] == _PLAYER_HOSTILE).nonzero()
-			for i in rane(0, len(enemy_y)):
+			for i in range(0, len(enemy_y)):
 				y = int(math.ceil((enemy_y[i] + 1) / 32))
 				x = int(math.ceil((enemy_x[i] + 1) / 32))
 				hot_squares[((y-1)*2) + (x - 1)] = 1
@@ -256,12 +599,14 @@ class SwarmbotAgent(base_agent.BaseAgent):
 			if not self.base_top_left:
 				hot_squares = hot_squares[::-1]
 
-			## adds enemy locations to the current state. 
+			## from obs and counts obtain the current state to be used in the qtable
+			self.current_state = self.get_current_state(obs, hot_squares)
 
-			## use q table to learn previous action and to choose an action. 
+			## use q table to learn previous action and to choose an action.
+			new_action = self.qlearn.choose_action(str(self.current_state))
 
-			##self.prev_state = current_state 
-			##self.prev_action = new_action 
+			self.prev_state = self.current_state 
+			self.prev_action = new_action 
 
 			action, x, y, unit, attachment = self.splitAction(self.prev_action)
 
@@ -383,7 +728,7 @@ class SwarmbotAgent(base_agent.BaseAgent):
 					else:
 						guess = 150
 						target = self.findLocationForBuilding(guess)
-						if target is not [-1, -1]
+						if target is not [-1, -1]:
 							self.apply_counts(unit)
 							self.states_happened.append((self.prev_state, self.move_number))
 							self.actions_taken.append((_BUILD_ARMORY, [_NOT_QUEUED, target]))
@@ -404,7 +749,7 @@ class SwarmbotAgent(base_agent.BaseAgent):
 					else:
 						guess = 150
 						target = self.findLocationForBuilding(guess)
-						if target is not [-1, -1]
+						if target is not [-1, -1]:
 							self.apply_counts(unit)
 							self.states_happened.append((self.prev_state, self.move_number))
 							self.actions_taken.append((_BUILD_BARRACKS, [_NOT_QUEUED, target]))
@@ -424,7 +769,7 @@ class SwarmbotAgent(base_agent.BaseAgent):
 					else:
 						guess = 150
 						target = self.findLocationForBuilding(guess)
-						if target is not [-1, -1]
+						if target is not [-1, -1]:
 							self.apply_counts(unit)
 							self.states_happened.append((self.prev_state, self.move_number))
 							self.actions_taken.append((_BUILD_FACTORY, [_NOT_QUEUED, target]))
@@ -444,7 +789,7 @@ class SwarmbotAgent(base_agent.BaseAgent):
 					else:
 						guess = 150
 						target = self.findLocationForBuilding(guess)
-						if target is not [-1, -1]
+						if target is not [-1, -1]:
 							self.apply_counts(unit)
 							self.states_happened.append((self.prev_state, self.move_number))
 							self.actions_taken.append((_BUILD_FUSION_CORE, [_NOT_QUEUED, target]))
@@ -464,7 +809,7 @@ class SwarmbotAgent(base_agent.BaseAgent):
 					else:
 						guess = 150
 						target = self.findLocationForBuilding(guess)
-						if target is not [-1, -1]
+						if target is not [-1, -1]:
 							self.apply_counts(unit)
 							self.states_happened.append((self.prev_state, self.move_number))
 							self.actions_taken.append((_BUILD_GHOST_ACADEMY, [_NOT_QUEUED, target]))
@@ -484,7 +829,7 @@ class SwarmbotAgent(base_agent.BaseAgent):
 					else:
 						guess = 150
 						target = self.findLocationForBuilding(guess)
-						if target is not [-1, -1]
+						if target is not [-1, -1]:
 							self.apply_counts(unit)
 							self.states_happened.append((self.prev_state, self.move_number))
 							self.actions_taken.append((_BUILD_STARPORT, [_NOT_QUEUED, target]))
@@ -504,7 +849,7 @@ class SwarmbotAgent(base_agent.BaseAgent):
 					else:
 						guess = 150
 						target = self.findLocationForBuilding(guess)
-						if target is not [-1, -1]
+						if target is not [-1, -1]:
 							self.apply_counts(unit)
 							self.states_happened.append((self.prev_state, self.move_number))
 							self.actions_taken.append((_BUILD_SUPPLY_DEPOT, [_NOT_QUEUED, target]))
@@ -547,19 +892,16 @@ class SwarmbotAgent(base_agent.BaseAgent):
 			## returns idle scvs to mineral harvesting 
 			if action == 'b' and unit in build_with_SCV:
 				if _HARVEST_GATHER in obs.observation['available_actions']:
-                    unit_y, unit_x = (unit_type == _NEUTRAL_MINERAL_FIELD).nonzero()
-                    if unit_y.any():
-                        i = random.randint(0, len(unit_y) - 1)
-                        target = [int(unit_x[i]), int(unit_y[i])]
-                        self.states_happened.append((self.prev_state, self.move_number))
+					unit_y, unit_x = (unit_type == _NEUTRAL_MINERAL_FIELD).nonzero()
+					if unit_y.any():
+						i = random.randint(0, len(unit_y) - 1)
+						target = [int(unit_x[i]), int(unit_y[i])]
+						self.states_happened.append((self.prev_state, self.move_number))
 						self.actions_taken.append((_HARVEST_GATHER, [_NOT_QUEUED, target]))
-                        return actions.FunctionCall(_HARVEST_GATHER, [_QUEUED, target])
+						return actions.FunctionCall(_HARVEST_GATHER, [_QUEUED, target])
 
-            ## at this point you can also add research actions... 
+			## at this point you can also add research actions... 
 
 		self.states_happened.append((self.prev_state, self.move_number))
 		self.actions_taken.append((_NO_OP, []))
 		return actions.FunctionCall(_NO_OP, [])
-
-
-

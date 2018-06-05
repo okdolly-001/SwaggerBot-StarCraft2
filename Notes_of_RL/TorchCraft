@@ -1,0 +1,14 @@
+What is Facebook's TorchCraft?
+
+First, 
+What is Torch?
+Torch is a scientific computing framework with wide support for machine learning algorithms that puts GPUs first. 
+It is easy to use and efficient, thanks to an easy and fast scripting language, LuaJIT, and an underlying C/CUDA implementation.
+
+
+Then TorchCraft is: A bridge between Torch and StarCraft. (Developed by Facebook). 
+For more information: https://arxiv.org/pdf/1611.00625.pdf
+
+- TorchCraft is a library that enables deep learning research on Real-Time Strategy (RTS) games such as StarCraft: Brood War, 
+  by making it easier to control these games from a machine learning framework. 
+

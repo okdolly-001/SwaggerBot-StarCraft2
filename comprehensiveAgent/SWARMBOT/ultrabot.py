@@ -210,7 +210,7 @@ unit_dict = {
 
 build_to_action = {'barracks':_BUILD_BARRACKS, 'supplydepot':_BUILD_SUPPLY_DEPOT, 'commandcenter':_BUILD_COMMAND_CENTER, 'refinery':_REFINERY,
 				'ghostacademy':_BUILD_GHOST_ACADEMY, 'factory':_BUILD_FACTORY, 'armory':_BUILD_ARMORY, 'starport':_BUILD_STARPORT, 
-				'fusioncore':_BUILD_FUSION_CORE}
+				'fusioncore':_BUILD_FUSION_CORE, 'techlab': _BUILD_TECHLAB, 'reactor':_BUILD_REACTOR}
 
 unit_to_action = {'banshee':_TRAIN_BANSHEE,
 'battlecruiser':_TRAIN_BATTLE_CRUISER,
@@ -317,7 +317,7 @@ class QLearningTable:
 		self.check_state_exist(s_)
 		self.check_state_exist(s)
 
-		#q_predict = self.q_table.ix[s, a]
+		q_predict = self.q_table.ix[s, a]
 		#q_target = r + self.gamma * self.q_table.ix[s_, :].max()
 		
 		# update
@@ -374,6 +374,7 @@ class SwarmbotAgent(base_agent.BaseAgent):
 		self.point_selected = (None, None) ## point in the screen currently selected. 
 		self.depot_x = 5 ## starting x position used for finding locations for buildings
 		self.depot_y = 5 ## starting y position used for finding locations for buildings
+		self.death = 0
 
 	def get_current_state(self, obs, hot_squares):
 		score_cumulative = list(obs.observation['score_cumulative'])
@@ -430,19 +431,23 @@ class SwarmbotAgent(base_agent.BaseAgent):
 		action = smart_actions[action_id]
 		if 'attack' in action: ## if its an attack
 			splitted = action.split('_')
-			if len(splitted) == 4: ## unit specific attack 
+			if len(splitted) == 4: ## unit specific attack
+				print('---->', action) 
 				action, x, y, unit = splitted
 				return (action, x, y, unit, None)
 			else:
+				print('---->', action)
 				action, x, y = splitted
 				return (action, x, y, None, None) ## attack with all units
 		elif 'reactor' in action or 'techlab' in action: ## two main add-ons
+			print('---->', action)
 			action, unit, attachment = action.split('_')
 			return (action, None, None, unit, attachment)
 		else:	## regular action (either build or train a unit)
-			if action == 'donothing':
+			if action == 'donothing' or action == 'retreat':
 				return (None, None, None, None, None)
 			else:
+				print('---->', action)
 				action, unit = action.split('_')
 				return (action, None, None, unit, None)
 
@@ -454,6 +459,8 @@ class SwarmbotAgent(base_agent.BaseAgent):
 		## obtain map limits 
 		max_x, max_y = self.unit_types.shape
 		while True:
+			print(self.death)
+			self.death += 1
 			## selects random points where to place the building predetermined within radious of (5,5)
 			s_target_x = int(self.depot_x + np.random.choice([-1,0,1], 1) * distance)
 			s_target_y = int(self.depot_y + np.random.choice([-1,0,1], 1) * distance)
@@ -484,6 +491,7 @@ class SwarmbotAgent(base_agent.BaseAgent):
 			## never found a location
 			if distance > 20:
 				s_target = [-1, -1]
+				break
 		return s_target
 
 
@@ -565,7 +573,7 @@ class SwarmbotAgent(base_agent.BaseAgent):
 
 		if obs.last():
 			self.reward = obs.reward
-			self.qlearn.learn(str(self.previous_state), self.previous_action, reward, 'terminal')
+			self.qlearn.learn(str(self.prev_state), self.prev_action, self.reward, 'terminal')
 			self.reset()
 			self.prev_action = None
 			self.prev_state = None
@@ -573,7 +581,7 @@ class SwarmbotAgent(base_agent.BaseAgent):
 			self.action_queue.clear()
 
 			## in states happened the 3 is terminal. 
-			self.states_happened.append((prev_state, 3))
+			self.states_happened.append((self.prev_state, 3))
 			self.actions_taken.append((_NO_OP, []))
 			return actions.FunctionCall(_NO_OP, [])
 
@@ -583,6 +591,8 @@ class SwarmbotAgent(base_agent.BaseAgent):
 			self.base_top_left = 1 if player_y.any() and player_y.mean() <= 31 else 0	
 			## applies initial counts and locations to command centers, vespene geysers and mineral fields
 			self.apply_counts()
+			self.prev_state = None
+			self.prev_action = None
 
 			self.current_state = []
 
@@ -893,7 +903,7 @@ class SwarmbotAgent(base_agent.BaseAgent):
 			## returns idle scvs to mineral harvesting 
 			if action == 'b' and unit in build_with_SCV:
 				if _HARVEST_GATHER in obs.observation['available_actions']:
-					unit_y, unit_x = (unit_type == _NEUTRAL_MINERAL_FIELD).nonzero()
+					unit_y, unit_x = (self.unit_types == _NEUTRAL_MINERAL_FIELD).nonzero()
 					if unit_y.any():
 						i = random.randint(0, len(unit_y) - 1)
 						target = [int(unit_x[i]), int(unit_y[i])]

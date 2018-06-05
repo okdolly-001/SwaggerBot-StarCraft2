@@ -433,7 +433,9 @@ class SwarmbotAgent(base_agent.BaseAgent):
 			if len(splitted) == 4: ## unit specific attack 
 				action, x, y, unit = splitted
 				return (action, x, y, unit, None)
-			return (action, x, y, None, None) ## attack with all units
+			else:
+				action, x, y = splitted
+				return (action, x, y, None, None) ## attack with all units
 		elif 'reactor' in action or 'techlab' in action: ## two main add-ons
 			action, unit, attachment = action.split('_')
 			return (action, None, None, unit, attachment)

@@ -693,7 +693,7 @@ class SwarmbotAgent(base_agent.BaseAgent):
 
 			action, x, y, unit, attachment = self.splitAction(self.prev_action)
 
-			if action == 'b' and unit == 'refinery': ## make refinery 
+			if action == 'b' and unit == 'refinery' and build_to_action[unit] in obs.observation['available_actions']: ## make refinery 
 				unit_y, unit_x = (self.unit_types == _NEUTRAL_VESPENE_GEYSER).nonzero()
 				if unit_y.any():
 					i = random.randint(0, len(unit_y) - 1)
@@ -702,7 +702,7 @@ class SwarmbotAgent(base_agent.BaseAgent):
 					self.actions_taken.append((_BUILD_REFINERY, [_NOT_QUEUED, target]))
 					return actions.FunctionCall(_BUILD_REFINERY, [_NOT_QUEUED, target])
 
-			elif action == 'b' and (unit == 'techlab' or unit == 'reactor'): ## place add-on
+			elif action == 'b' and (unit == 'techlab' or unit == 'reactor')  and build_to_action[unit] in obs.observation['available_actions']: ## place add-on
 				unit_y, unit_x = (self.unit_types == _SCV).nonzero()
 				if self.point_selected is not (None, None):
 					target = self.point_selected[0]
@@ -714,7 +714,7 @@ class SwarmbotAgent(base_agent.BaseAgent):
 						return actions.FunctionCall(_BUILD_TECHLAB, [_NOT_QUEUED, target])
 
 			## will compress later
-			elif action == 'b' and (unit in build_with_SCV and unit != 'refinery'): ## make barracks
+			elif action == 'b' and (unit in build_with_SCV and unit != 'refinery')  and build_to_action[unit] in obs.observation['available_actions']: ## make barracks
 				
 				if unit == 'armory':
 					if unit_dict[unit] in self.unit_counts:
@@ -862,11 +862,10 @@ class SwarmbotAgent(base_agent.BaseAgent):
 			## traing  units ::
 
 			## might expand idk yet
-			elif action == 't' and self.point_selected is not (None, None):
-				if unit_to_action[unit] in obs.observation['available_actions']:
-					self.states_happened.append((self.prev_state, self.move_number))
-					self.actions_taken.append((unit_to_action[unit], [_QUEUED]))
-					return actions.FunctionCall(unit_to_action[unit], [_QUEUED])
+			elif action == 't' and self.point_selected is not (None, None) and unit_to_action[unit] in obs.observation['available_actions']:
+				self.states_happened.append((self.prev_state, self.move_number))
+				self.actions_taken.append((unit_to_action[unit], [_QUEUED]))
+				return actions.FunctionCall(unit_to_action[unit], [_QUEUED])
 
 			## actually attack
 

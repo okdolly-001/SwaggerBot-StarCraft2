@@ -446,7 +446,7 @@ class SwarmbotAgent(base_agent.BaseAgent):
 
 	## lent from https://github.com/jlboes/Starcraft-II-learning-bot/blob/master/src/scagent.py
 	## credit to the creator, before using, update the self.unit_types
-	def findLocationForBuilding(self, size_of_unit, distance=6, chance=10):
+	def findLocationForBuilding(self, size, distance=6, chance=10):
 		## start from mineral fields 
 		mf_y, mf_x = (self.unit_types == _NEUTRAL_MINERAL_FIELD).nonzero()
 		## obtain map limits 
@@ -513,16 +513,16 @@ class SwarmbotAgent(base_agent.BaseAgent):
 			self.unit_counts[_NEUTRAL_MINERAL_FIELD] = 1 if vg_y.any() else 0
 		## either queues a count for the update step or it increases the count of a unit
 		if unit_name is not None:
-			unit_y, unit_x = (self.unit_types == self.unit_dict[unit_name]).nonzero()
+			unit_y, unit_x = (self.unit_types == unit_dict[unit_name]).nonzero()
 			## if we still dont know the size of the unit place it in a queue to count later
-			if unit_y.any() is None or self.unit_dict[unit_name] not in self.unit_sizes:
+			if unit_y.any() is None or unit_dict[unit_name] not in self.unit_sizes:
 				self.wait_2_count.append(unit_name)
 			else:
 				## increases the count by one for every action to train or build
 				## in some situations, we might be training more than 1 unit at a
 				## time, but for now we will leave it like so. When we do a full 
 				## count this will be fixed by itself
-				self.unit_counts[self.unit_dict[unit_name]] += 1
+				self.unit_counts[unit_dict[unit_name]] += 1
 		
 
 	def update_counts(self):
@@ -536,11 +536,11 @@ class SwarmbotAgent(base_agent.BaseAgent):
 		not_yet_built = deque()
 		while(len(self.wait_2_count) != 0):
 			unit_name = self.wait_2_count.popLeft()
-			unit_x, unit_y = (self.unit_types == self.unit_dict[unit_name]).nonzero()
+			unit_x, unit_y = (self.unit_types == unit_dict[unit_name]).nonzero()
 			if unit_y.any():
 				## gets the pixel size of every unit in the waiting queue
-				self.unit_sizes[self.unit_dict[unit_name]] = count_units(unit_x, unit_y)
-				self.unit_counts[self.unit_dict[unit_name]] = int(math.ceil(len(unit_y) / self.unit_sizes[self.unit_dict[unit_name]]))
+				self.unit_sizes[unit_dict[unit_name]] = count_units(unit_x, unit_y)
+				self.unit_counts[unit_dict[unit_name]] = int(math.ceil(len(unit_y) / self.unit_sizes[unit_dict[unit_name]]))
 			else: ## those that were just popped out will bw placed back since they havent been built
 				not_yet_built.append(unit_name)
 		self.wait_2_count = deque(not_yet_built)
@@ -625,7 +625,7 @@ class SwarmbotAgent(base_agent.BaseAgent):
 					return actions.FunctionCall(_SELECT_POINT, [_NOT_QUEUED, target])
 
 			elif action == 'b' and (unit == 'techlab' or unit == 'reactor'):
-				unit_y, unit_x = (self.unit_types == self.unit_dict[attachment]).nonzero()
+				unit_y, unit_x = (self.unit_types == unit_dict[attachment]).nonzero()
 				if unit_y.any():
 					i = random.randint(0, len(unit_y) - 1)
 					target = [unit_x[i], unit_y[i]]
@@ -715,10 +715,10 @@ class SwarmbotAgent(base_agent.BaseAgent):
 			elif action == 'b' and (unit in build_with_SCV and unit != 'refinery'): ## make barracks
 				
 				if unit == 'armory':
-					if self.unit_dict[unit] in self.unit_counts:
-						count = self.unit_counts[self.unit_dict[unit]]
+					if unit_dict[unit] in self.unit_counts:
+						count = self.unit_counts[unit_dict[unit]]
 						if count < 2:
-							size = int(math.ceil(math.sqrt(self.unit_sizes[self.unit_dict[unit]])))
+							size = int(math.ceil(math.sqrt(self.unit_sizes[unit_dict[unit]])))
 							target = self.findLocationForBuilding(size)
 							if target is not [-1, -1]:
 								self.apply_counts(unit)
@@ -736,10 +736,10 @@ class SwarmbotAgent(base_agent.BaseAgent):
 
 
 				elif unit == 'barracks':
-					if self.unit_dict[unit] in self.unit_counts:
-						count = self.unit_counts[self.unit_dict[unit]]
+					if unit_dict[unit] in self.unit_counts:
+						count = self.unit_counts[unit_dict[unit]]
 						if count < 4:
-							size = int(math.ceil(math.sqrt(self.unit_sizes[self.unit_dict[unit]])))
+							size = int(math.ceil(math.sqrt(self.unit_sizes[unit_dict[unit]])))
 							target = self.findLocationForBuilding(size)
 							if target is not [-1, -1]:
 								self.apply_counts(unit)
@@ -756,10 +756,10 @@ class SwarmbotAgent(base_agent.BaseAgent):
 							return actions.FunctionCall(_BUILD_BARRACKS, [_NOT_QUEUED, target])
 
 				elif unit == 'factory': 
-					if self.unit_dict[unit] in self.unit_counts:
-						count = self.unit_counts[self.unit_dict[unit]]
+					if unit_dict[unit] in self.unit_counts:
+						count = self.unit_counts[unit_dict[unit]]
 						if count < 2:
-							size = int(math.ceil(math.sqrt(self.unit_sizes[self.unit_dict[unit]])))
+							size = int(math.ceil(math.sqrt(self.unit_sizes[unit_dict[unit]])))
 							target = self.findLocationForBuilding(size)
 							if target is not [-1, -1]:
 								self.apply_counts(unit)
@@ -776,10 +776,10 @@ class SwarmbotAgent(base_agent.BaseAgent):
 							return actions.FunctionCall(_BUILD_FACTORY, [_NOT_QUEUED, target])
 
 				elif unit == 'fusioncore':
-					if self.unit_dict[unit] in self.unit_counts:
-						count = self.unit_counts[self.unit_dict[unit]]
+					if unit_dict[unit] in self.unit_counts:
+						count = self.unit_counts[unit_dict[unit]]
 						if count < 2:
-							size = int(math.ceil(math.sqrt(self.unit_sizes[self.unit_dict[unit]])))
+							size = int(math.ceil(math.sqrt(self.unit_sizes[unit_dict[unit]])))
 							target = self.findLocationForBuilding(size)
 							if target is not [-1, -1]:
 								self.apply_counts(unit)
@@ -796,10 +796,10 @@ class SwarmbotAgent(base_agent.BaseAgent):
 							return actions.FunctionCall(_BUILD_FUSION_CORE, [_NOT_QUEUED, target])
 
 				elif unit == 'ghostacademy':
-					if self.unit_dict[unit] in self.unit_counts:
-						count = self.unit_counts[self.unit_dict[unit]]
+					if unit_dict[unit] in self.unit_counts:
+						count = self.unit_counts[unit_dict[unit]]
 						if count < 2:
-							size = int(math.ceil(math.sqrt(self.unit_sizes[self.unit_dict[unit]])))
+							size = int(math.ceil(math.sqrt(self.unit_sizes[unit_dict[unit]])))
 							target = self.findLocationForBuilding(size)
 							if target is not [-1, -1]:
 								self.apply_counts(unit)
@@ -816,10 +816,10 @@ class SwarmbotAgent(base_agent.BaseAgent):
 							return actions.FunctionCall(_BUILD_GHOST_ACADEMY, [_NOT_QUEUED, target])
 
 				elif unit == 'starport':
-					if self.unit_dict[unit] in self.unit_counts:
-						count = self.unit_counts[self.unit_dict[unit]]
+					if unit_dict[unit] in self.unit_counts:
+						count = self.unit_counts[unit_dict[unit]]
 						if count < 2:
-							size = int(math.ceil(math.sqrt(self.unit_sizes[self.unit_dict[unit]])))
+							size = int(math.ceil(math.sqrt(self.unit_sizes[unit_dict[unit]])))
 							target = self.findLocationForBuilding(size)
 							if target is not [-1, -1]:
 								self.apply_counts(unit)
@@ -836,10 +836,10 @@ class SwarmbotAgent(base_agent.BaseAgent):
 							return actions.FunctionCall(_BUILD_STARPORT, [_NOT_QUEUED, target])
 
 				elif unit == 'supplydepot':
-					if self.unit_dict[unit] in self.unit_counts:
-						count = self.unit_counts[self.unit_dict[unit]]
+					if unit_dict[unit] in self.unit_counts:
+						count = self.unit_counts[unit_dict[unit]]
 						if count < 5:
-							size = int(math.ceil(math.sqrt(self.unit_sizes[self.unit_dict[unit]])))
+							size = int(math.ceil(math.sqrt(self.unit_sizes[unit_dict[unit]])))
 							target = self.findLocationForBuilding(size)
 							if target is not [-1, -1]:
 								self.apply_counts(unit)

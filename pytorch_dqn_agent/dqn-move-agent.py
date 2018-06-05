@@ -35,6 +35,7 @@ _PLAYER_SELF = 1
 _PLAYER_NEUTRAL = 3
 _SUPPLY_USED = 3
 _SUPPLY_MAX = 4
+
 _NOT_QUEUED = [0]
 _QUEUED = [1]
 _SELECT_ALL = [0]
@@ -54,7 +55,7 @@ ACTION_ATTACK = 'attack'
 ACTION_MOVE_SCREEN = 'movescreen'
 
 
-# Array of actions 
+# Array of actions
 smart_actions = [
     ACTION_SELECT_ARMY,
     ACTION_DO_NOTHING,
@@ -71,6 +72,7 @@ smart_actions = [
 KILL_UNIT_REWARD = 0.2
 KILL_BUILDING_REWARD = 0.5
 
+reward_check = []
 
 model = DQN(6, 8)
 optimizer = optim.RMSprop(model.parameters(), 1e-3)
@@ -85,7 +87,7 @@ class DQNAgent(base_agent.BaseAgent):
         self.model = model
         self.memory = memory
         self.optimizer = optimizer
-        self.diagnostics = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+        self.diagnostics = [0, 0, 0, 0, 0, 0, 0, 0]
 
         self.base_top_left = None
         self.supply_depot_built = False
@@ -114,7 +116,10 @@ class DQNAgent(base_agent.BaseAgent):
         ### State space ###
 
         # we need to define what subset of the current game state
-        # that we want to observe for our given problem.
+
+        if obs.last():
+            with open('reward.txt', 'a') as myfile:
+                myfile.write(str(obs.reward) + "\n")
 
         player_y, player_x = (
             obs.observation['minimap'][_PLAYER_RELATIVE] == _PLAYER_SELF).nonzero()
@@ -122,7 +127,6 @@ class DQNAgent(base_agent.BaseAgent):
 
         can_move = _MOVE_SCREEN in obs.observation["available_actions"]
         player_located = player_y.any()
-
 
         unit_type = obs.observation['screen'][_UNIT_TYPE]
 
@@ -134,9 +138,7 @@ class DQNAgent(base_agent.BaseAgent):
 
         supply_limit = obs.observation['player'][4]
         army_supply = obs.observation['player'][5]
-        function_action = None
-      
-        # [1, n_states] tensor of states
+
         state = torch.FloatTensor([[float(can_move), float(player_located),
                                     float(supply_depot_count), float(
                                         barracks_count), float(supply_limit),
@@ -148,80 +150,6 @@ class DQNAgent(base_agent.BaseAgent):
         temp_action = self.select_action(state, self.episodes)
         smart_action = smart_actions[temp_action]
 
-        #Functionality of different actions 
-        if check_available(obs, _MOVE_SCREEN) and smart_action == ACTION_MOVE_SCREEN:
-            function_action = _MOVE_SCREEN
-            target = [_NOT_QUEUED, position]
-
-        elif check_available(obs, _NO_OP) and smart_action == ACTION_DO_NOTHING:
-            function_action = _NO_OP
-            target = []
-
-        elif check_available(obs, _SELECT_POINT) and smart_action == ACTION_SELECT_SCV:
-            unit_type = obs.observation['screen'][_UNIT_TYPE]
-            unit_y, unit_x = (unit_type == _TERRAN_SCV).nonzero()
-
-            if unit_y.any():
-                i = random.randint(0, len(unit_y) - 1)
-                function_action = _SELECT_POINT
-                target = [_NOT_QUEUED, [unit_x[i], unit_y[i]]]
-
-        elif check_available(obs, _BUILD_SUPPLY_DEPOT) and smart_action == ACTION_BUILD_SUPPLY_DEPOT:
-            unit_type = obs.observation['screen'][_UNIT_TYPE]
-            unit_y, unit_x = (unit_type == _TERRAN_COMMANDCENTER).nonzero()
-
-            if unit_y.any():
-                function_action = _BUILD_SUPPLY_DEPOT
-                target = self.transformLocation(
-                    int(unit_x.mean()), 0, int(unit_y.mean()), 20)
-
-                target = [_NOT_QUEUED, target]
-
-        elif check_available(obs, _BUILD_BARRACKS) and smart_action == ACTION_BUILD_BARRACKS:
-            unit_type = obs.observation['screen'][_UNIT_TYPE]
-            unit_y, unit_x = (unit_type == _TERRAN_COMMANDCENTER).nonzero()
-
-            if unit_y.any():
-                target = self.transformLocation(
-                    int(unit_x.mean()), 20, int(unit_y.mean()), 0)
-                function_action = _BUILD_BARRACKS
-                target = [_NOT_QUEUED, target]
-
-        elif smart_action == ACTION_ATTACK:
-            if _ATTACK_MINIMAP in obs.observation["available_actions"]:
-                if self.base_top_left:
-                    function_action = _ATTACK_MINIMAP,
-                    target = [_NOT_QUEUED, [39, 45]]
-                function_action = _ATTACK_MINIMAP
-                target = [_NOT_QUEUED, [21, 24]]
-
-        elif smart_action == ACTION_SELECT_ARMY:
-            if _SELECT_ARMY in obs.observation['available_actions']:
-                function_action = _SELECT_ARMY
-                target = [_NOT_QUEUED]
-
-        elif smart_action == ACTION_BUILD_MARINE:
-            if _TRAIN_MARINE in obs.observation['available_actions']:
-                function_action = _TRAIN_MARINE
-                target = [_QUEUED]
-
-        elif smart_action == ACTION_SELECT_BARRACKS:
-            unit_type = obs.observation['screen'][_UNIT_TYPE]
-            unit_y, unit_x = (unit_type == _TERRAN_BARRACKS).nonzero()
-            if unit_y.any():
-                position = [int(unit_x.mean()), int(unit_y.mean())]
-                function_action = _SELECT_POINT
-                target = [_NOT_QUEUED, position]
-
-        else:
-            function_action = _NO_OP
-            target = []
-
-        if function_action is None:
-            function_action = _NO_OP
-            target = []
-
-        #Keep check of previous states 
         if self.previous_state is None:
             self.previous_action = temp_action
             self.previous_state = state
@@ -244,8 +172,58 @@ class DQNAgent(base_agent.BaseAgent):
 
         print(self.diagnostics)
 
-        time.sleep(0.3)
-        return actions.FunctionCall(function_action, target)
+        if check_available(obs, _NO_OP) and smart_action == ACTION_DO_NOTHING:
+            return actions.FunctionCall(_NO_OP, [])
+
+        elif smart_action == ACTION_SELECT_SCV:
+            unit_y, unit_x = (unit_type == _TERRAN_SCV).nonzero()
+            if unit_y.any():
+                i = random.randint(0, len(unit_y) - 1)
+                target = [unit_x[i], unit_y[i]]
+                return actions.FunctionCall(_SELECT_POINT, [_NOT_QUEUED, target])
+
+        elif check_available(obs, _BUILD_SUPPLY_DEPOT) and smart_action == ACTION_BUILD_SUPPLY_DEPOT:
+            if _BUILD_SUPPLY_DEPOT in obs.observation['available_actions']:
+                unit_y, unit_x = (unit_type == _TERRAN_COMMANDCENTER).nonzero()
+
+                if unit_y.any():
+                    target = self.transformLocation(
+                        int(unit_x.mean()), 0, int(unit_y.mean()), 20)
+                    return actions.FunctionCall(_BUILD_SUPPLY_DEPOT, [_NOT_QUEUED, target])
+
+        elif check_available(obs, _BUILD_BARRACKS) and smart_action == ACTION_BUILD_BARRACKS:
+            unit_y, unit_x = (unit_type == _TERRAN_COMMANDCENTER).nonzero()
+
+            if unit_y.any():
+                target = self.transformLocation(
+                    int(unit_x.mean()), 20, int(unit_y.mean()), 0)
+
+                return actions.FunctionCall(_BUILD_BARRACKS, [_NOT_QUEUED, target])
+
+        elif smart_action == ACTION_ATTACK:
+            do_it = True
+            if len(obs.observation['single_select']) > 0 and obs.observation['single_select'][0][0] == _TERRAN_SCV:
+                do_it = False
+            if len(obs.observation['multi_select']) > 0 and obs.observation['multi_select'][0][0] == _TERRAN_SCV:
+                do_it = False
+            if do_it and _ATTACK_MINIMAP in obs.observation["available_actions"]:
+                if self.base_top_left:
+                    return actions.FunctionCall(_ATTACK_MINIMAP, [_NOT_QUEUED, [39, 45]])
+                return actions.FunctionCall(_ATTACK_MINIMAP, [_NOT_QUEUED, [21, 24]])
+
+        elif check_available(obs, _SELECT_ARMY) and smart_action == ACTION_SELECT_ARMY:
+            return actions.FunctionCall(_SELECT_ARMY, [_NOT_QUEUED])
+
+        elif check_available(obs, _TRAIN_MARINE) and smart_action == ACTION_BUILD_MARINE:
+            return actions.FunctionCall(_TRAIN_MARINE, [_QUEUED])
+
+        elif smart_action == ACTION_SELECT_BARRACKS:
+            unit_y, unit_x = (unit_type == _TERRAN_BARRACKS).nonzero()
+            if unit_y.any():
+                target = [int(unit_x.mean()), int(unit_y.mean())]
+                return actions.FunctionCall(_SELECT_POINT, [_NOT_QUEUED, target])
+
+        return actions.FunctionCall(_NO_OP, [])
 
     def optimize(self, batch):
         # Compute a mask of non-final states and concatenate the batch elements
@@ -305,7 +283,7 @@ class DQNAgent(base_agent.BaseAgent):
             with torch.no_grad():
                 return self.model(state).max(1)[1].view(1, 1)
         else:
-            return torch.tensor([[random.randrange(9)]], dtype=torch.long)
+            return torch.tensor([[random.randrange(8)]], dtype=torch.long)
 
 
 def check_available(obs, action):

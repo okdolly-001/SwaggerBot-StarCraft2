@@ -3,27 +3,19 @@ import random
 import numpy as np
 import tensorflow as tf
 # from pad_data import pad_and_batch
-from prep_data import units, terran_x, terran_y, dict_map
+# from prep_data import units, terran_x, terran_y, dict_map
 
 ## borrow some implementation from N. Locascio's code ob github
 ## https://github.com/nicholaslocascio/bcs-lstm/blob/master/draft/rnn.py
 if __name__ == '__main__':
-	with open('preped_data.pkl', 'rb') as pkl:
-		data = pickle.load(pkl)
-	# data = pad_and_batch(data)
-	## number of replay samples (304 for Terran victories)
-	n_samples = len(data)
-	print("length of data is\n", len(data))
-
 	## vector lengths for training and testing data 
-	print("terran_x is\n", terran_x)
-	n_features = len(terran_x) 
+	n_features = 68
 	print("terran_x length is\n")
 	## y vector length meant for the unit to use
 	## (e.g 21 == 'SCV') or something (forget about events)
-	n_outs = len(units)
+	n_outs = 36
 	## number of batches
-	batch_size = 50
+	batch_size = 1
 	## hidden lstm cell sizes
 	rnn_size = 100
 
@@ -44,21 +36,22 @@ if __name__ == '__main__':
 
 	with tf.Session(config=config) as sess:
 		tf.global_variables_initializer().run(session=sess)
-		random.shuffle(data)
+		# random.shuffle(data)
 
 		err_rate = 0.0
 		for batch in data:
-			print("batch[0] is\n", batch[0])
-			x = np.array(batch[0], dtype=np.float32)
-			print("x is\n", x)
-			print("length of row in x is\n", len(x))
-			y = []
-			for row in batch[1]:
-				y.append(row[0])
-			# print(y)
-			# y = np.array(batch[1], dtype=np.float32)
-			x = np.reshape(x, (-1, batch_size, n_features))
-			x = np.reshape(x, (x.shape[1], x.shape[0], x.shape[2]))
+			x = [36]
+			# print("batch[0] is\n", batch[0])
+			# x = np.array(batch[0], dtype=np.float32)
+			# print("x is\n", x)
+			# print("length of row in x is\n", len(x))
+			# y = []
+			# for row in batch[1]:
+			# 	y.append(row[0])
+			# # print(y)
+			# # y = np.array(batch[1], dtype=np.float32)
+			# x = np.reshape(x, (-1, batch_size, n_features))
+			# x = np.reshape(x, (x.shape[1], x.shape[0], x.shape[2]))
 			o, s = sess.run([outputs, final_state], feed_dict={x_train:x})
 			print("output:\n", o.shape)
 			print("final s:\n", s[0].shape, s[1].shape)

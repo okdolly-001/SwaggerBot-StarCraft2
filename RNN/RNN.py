@@ -2,7 +2,7 @@ import pickle
 import random
 import numpy as np
 import tensorflow as tf
-from pad_data import pad_and_batch
+# from pad_data import pad_and_batch
 from prep_data import units, terran_x, terran_y, dict_map
 
 ## borrow some implementation from N. Locascio's code ob github
@@ -10,11 +10,15 @@ from prep_data import units, terran_x, terran_y, dict_map
 if __name__ == '__main__':
 	with open('preped_data.pkl', 'rb') as pkl:
 		data = pickle.load(pkl)
-	data = pad_and_batch(data)
+	# data = pad_and_batch(data)
 	## number of replay samples (304 for Terran victories)
 	n_samples = len(data)
+	print("length of data is\n", len(data))
+
 	## vector lengths for training and testing data 
-	n_features = len(terran_x)
+	print("terran_x is\n", terran_x)
+	n_features = len(terran_x) 
+	print("terran_x length is\n")
 	## y vector length meant for the unit to use
 	## (e.g 21 == 'SCV') or something (forget about events)
 	n_outs = len(units)
@@ -27,6 +31,7 @@ if __name__ == '__main__':
 	y_train = tf.placeholder(tf.float32, [batch_size, None])
 
 	cell = tf.nn.rnn_cell.LSTMCell(rnn_size)
+
 	init_state = cell.zero_state(rnn_size, tf.float32)
 	outputs, final_state = tf.nn.dynamic_rnn(cell, x_train, dtype=tf.float32)
 
@@ -43,8 +48,15 @@ if __name__ == '__main__':
 
 		err_rate = 0.0
 		for batch in data:
+			print("batch[0] is\n", batch[0])
 			x = np.array(batch[0], dtype=np.float32)
-			y = np.array(batch[1], dtype=np.float32)
+			print("x is\n", x)
+			print("length of row in x is\n", len(x))
+			y = []
+			for row in batch[1]:
+				y.append(row[0])
+			# print(y)
+			# y = np.array(batch[1], dtype=np.float32)
 			x = np.reshape(x, (-1, batch_size, n_features))
 			x = np.reshape(x, (x.shape[1], x.shape[0], x.shape[2]))
 			o, s = sess.run([outputs, final_state], feed_dict={x_train:x})

@@ -15,7 +15,7 @@ with open("reward.txt", 'rU') as f:
 	for row in res:
 		row = ''.join(row) # converts list to string
 		game_count = game_count + 1 # game counter
-		if row == "-1":
+		if row == "1":
 			cur_win_count = cur_win_count + 1
 			win_so_far.append(cur_win_count) 
 			

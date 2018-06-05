@@ -123,7 +123,6 @@ class DQNAgent(base_agent.BaseAgent):
         can_move = _MOVE_SCREEN in obs.observation["available_actions"]
         player_located = player_y.any()
 
-        position = [int(player_x.mean()), int(player_y.mean())]
 
         unit_type = obs.observation['screen'][_UNIT_TYPE]
 
@@ -136,11 +135,7 @@ class DQNAgent(base_agent.BaseAgent):
         supply_limit = obs.observation['player'][4]
         army_supply = obs.observation['player'][5]
         function_action = None
-        #
-        # killed_unit_score = obs.observation['score_cumulative'][5]
-        # killed_building_score = obs.observation['score_cumulative'][6]
-        #
-
+      
         # [1, n_states] tensor of states
         state = torch.FloatTensor([[float(can_move), float(player_located),
                                     float(supply_depot_count), float(

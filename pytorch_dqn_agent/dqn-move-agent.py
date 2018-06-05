@@ -53,15 +53,15 @@ ACTION_SELECT_ARMY = 'selectarmy'
 ACTION_ATTACK = 'attack'
 ACTION_MOVE_SCREEN = 'movescreen'
 
+
+# Array of actions 
 smart_actions = [
-    ACTION_MOVE_SCREEN,
     ACTION_SELECT_ARMY,
     ACTION_DO_NOTHING,
     ACTION_SELECT_SCV,
     ACTION_BUILD_SUPPLY_DEPOT,
     ACTION_BUILD_BARRACKS,
     ACTION_ATTACK,
-
     ACTION_SELECT_BARRACKS,
     ACTION_BUILD_MARINE,
 
@@ -72,7 +72,7 @@ KILL_UNIT_REWARD = 0.2
 KILL_BUILDING_REWARD = 0.5
 
 
-model = DQN(6, 9)
+model = DQN(6, 8)
 optimizer = optim.RMSprop(model.parameters(), 1e-3)
 memory = ReplayMemory(10000)
 
@@ -148,6 +148,7 @@ class DQNAgent(base_agent.BaseAgent):
         temp_action = self.select_action(state, self.episodes)
         smart_action = smart_actions[temp_action]
 
+        #Functionality of different actions 
         if check_available(obs, _MOVE_SCREEN) and smart_action == ACTION_MOVE_SCREEN:
             function_action = _MOVE_SCREEN
             target = [_NOT_QUEUED, position]
@@ -220,6 +221,7 @@ class DQNAgent(base_agent.BaseAgent):
             function_action = _NO_OP
             target = []
 
+        #Keep check of previous states 
         if self.previous_state is None:
             self.previous_action = temp_action
             self.previous_state = state

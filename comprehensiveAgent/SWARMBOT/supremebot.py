@@ -500,6 +500,8 @@ class SwarmbotAgent(base_agent.BaseAgent):
 			self.current_state = []
 
 		if obs.last():
+			with open('reward.txt', 'a') as myfile:
+				myfile.write(str(obs.reward) + "\n")
 			self.reward = obs.reward
 			self.qlearn.learn(str(self.prev_state), self.prev_action, self.reward, 'terminal')
 			self.reset()

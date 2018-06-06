@@ -220,7 +220,7 @@ Buildings = [_BARRACKS, _ARMORY, _REACTOR, _COMMAND_CENTER, _FACTORY,
 			_NEUTRAL_MINERAL_FIELD, _NEUTRAL_VESPENE_GEYSER]
 
 smart_actions = [	
-	ACTION_DO_NOTHING, 			
+	#ACTION_DO_NOTHING, 			
 	#ACTION_T_BANSHEE,			
 	#ACTION_RETREAT,
 	#ACTION_T_BATTLECRUISER, 	
@@ -244,7 +244,7 @@ smart_actions = [
 	#ACTION_B_GHOSTACADEMY,		
 	ACTION_B_REFINERY,			
 	#ACTION_B_STARPORT,			
-	ACTION_B_SUPPLYDEPOT
+	ACTION_B_SUPPLYDEPOT,
 	#ACTION_B_TECHLAB_FACTORY, 	
 	#ACTION_B_TECHLAB_STARPORT, 	
 	ACTION_B_TECHLAB_BARRACKS,
@@ -385,7 +385,7 @@ class SwarmbotAgent(base_agent.BaseAgent):
 			## wasnt sure if it could at somepoint 
 			## stay in an infinite loop in case it 
 			## never found a location
-			if distance > 40:
+			if distance > 100:
 				s_target = None
 				break
 		return s_target
@@ -545,6 +545,7 @@ class SwarmbotAgent(base_agent.BaseAgent):
 ## ------------------------------------------------------------------------------------------------------------------- ##
 
 			action, x, y, unit, attachment = self.splitAction(self.prev_action)
+			print(action, x, y, unit, attachment)
 
 			if action == 'b' and unit == 'supplydepot' and _SELECT_POINT in obs.observation['available_actions']:
 				self.unit_types = obs.observation['screen'][_UNIT_TYPE]
@@ -594,12 +595,35 @@ class SwarmbotAgent(base_agent.BaseAgent):
 					return actions.FunctionCall(_SELECT_POINT, [_SELECT_ALL, target])
 
 			elif action == 'attack' and _SELECT_ARMY in obs.observation['available_actions']:
-				self.select_point = (None, 'army')
+				self.point_selected = (None, 'army')
 				self.states_happened.append((self.prev_state, self.move_number))
 				self.actions_taken.append((_SELECT_ARMY, [_NOT_QUEUED]))
 				return actions.FunctionCall(_SELECT_ARMY, [_NOT_QUEUED])
 
-			
+			elif action == 'b' and unit == 'techlab' and _SELECT_POINT in obs.observation['available_actions']:
+				self.unit_types = obs.observation['screen'][_UNIT_TYPE]
+				if attachment == 'barracks':
+					unit_y, unit_x = (self.unit_types == _BARRACKS).nonzero()
+					if unit_y.any():
+						j = random.randint(0, len(unit_y) - 1)
+						target = [unit_x[j], unit_y[j]]
+						self.point_selected = (target, 'barracks')
+						self.states_happened.append((self.prev_state, self.move_number))
+						self.actions_taken.append((_SELECT_POINT, [_NOT_QUEUED, target]))
+						return actions.FunctionCall(_SELECT_POINT, [_NOT_QUEUED, target])
+
+			elif action == 'b' and unit == 'reactor' and _SELECT_POINT in obs.observation['available_actions']:
+				self.unit_types = obs.observation['screen'][_UNIT_TYPE]
+				if attachment == 'barracks':
+					unit_y, unit_x = (self.unit_types == _BARRACKS).nonzero()
+					if unit_y.any():
+						j = random.randint(0, len(unit_y) - 1)
+						target = [unit_x[j], unit_y[j]]
+						self.point_selected = (target, 'barracks')
+						self.states_happened.append((self.prev_state, self.move_number))
+						self.actions_taken.append((_SELECT_POINT, [_NOT_QUEUED, target]))
+						return actions.FunctionCall(_SELECT_POINT, [_NOT_QUEUED, target])
+
 
 
 
@@ -611,6 +635,7 @@ class SwarmbotAgent(base_agent.BaseAgent):
 			self.move_number += 1
 
 			action, x, y, unit, attachment = self.splitAction(self.prev_action)
+			print(action, x, y, unit, attachment)
 
 			if action == 'b' and unit == 'supplydepot' and _BUILD_SUPPLY_DEPOT in obs.observation['available_actions']:
 				target = self.findLocationForBuilding(building_sizes['supplydepot'])
@@ -626,6 +651,7 @@ class SwarmbotAgent(base_agent.BaseAgent):
 						self.states_happened.append((self.prev_state, self.move_number))
 						self.actions_taken.append((_BUILD_SUPPLY_DEPOT, [_NOT_QUEUED, target]))
 						return actions.FunctionCall(_BUILD_SUPPLY_DEPOT, [_NOT_QUEUED, target])
+				self.point_selected = None
 
 			elif action == 'b' and unit == 'refinery' and _BUILD_REFINERY in obs.observation['available_actions']:
 				self.unit_types = obs.observation['screen'][_UNIT_TYPE]
@@ -635,15 +661,16 @@ class SwarmbotAgent(base_agent.BaseAgent):
 					target = [unit_x[i], unit_y[i]]
 					self.point_selected = None
 					if _REFINERY in self.unit_counts and self.unit_counts[_REFINERY] <= 2:
-						self.unit_counts[_SUPPLY_DEPOT] += 1
+						self.unit_counts[_REFINERY] += 1
 						self.states_happened.append((self.prev_state, self.move_number))
 						self.actions_taken.append((_BUILD_REFINERY, [_NOT_QUEUED, target]))
 						return actions.FunctionCall(_BUILD_REFINERY, [_NOT_QUEUED, target])
 					else:
-						self.unit_counts[_SUPPLY_DEPOT] = 1
+						self.unit_counts[_REFINERY] = 1
 						self.states_happened.append((self.prev_state, self.move_number))
 						self.actions_taken.append((_BUILD_REFINERY, [_NOT_QUEUED, target]))
 						return actions.FunctionCall(_BUILD_REFINERY, [_NOT_QUEUED, target])
+				self.point_selected = None
 
 			elif action == 'b' and unit == 'barracks' and _BUILD_BARRACKS in obs.observation['available_actions']:
 				target = self.findLocationForBuilding(building_sizes['barracks'])
@@ -659,12 +686,15 @@ class SwarmbotAgent(base_agent.BaseAgent):
 						self.states_happened.append((self.prev_state, self.move_number))
 						self.actions_taken.append((_BUILD_BARRACKS, [_NOT_QUEUED, target]))
 						return actions.FunctionCall(_BUILD_BARRACKS, [_NOT_QUEUED, target])
+				self.point_selected = None
 
 			elif action == 't' and unit == 'marine' and _TRAIN_MARINE in obs.observation['available_actions']:
-				self.select_point = None
-				self.states_happened.append((self.prev_state, self.move_number))
-				self.actions_taken.append((_TRAIN_MARINE, [_QUEUED]))
-				return actions.FunctionCall(_TRAIN_MARINE, [_QUEUED])
+				if self.point_selected is not None and self.point_selected[1] == 'barracks':
+					self.point_selected = None
+					self.states_happened.append((self.prev_state, self.move_number))
+					self.actions_taken.append((_TRAIN_MARINE, [_QUEUED]))
+					return actions.FunctionCall(_TRAIN_MARINE, [_QUEUED])
+				self.point_selected = None
 
 			elif action == 'attack' and _ATTACK_MINIMAP in obs.observation['available_actions']:
 				do_it = True
@@ -678,11 +708,30 @@ class SwarmbotAgent(base_agent.BaseAgent):
 
 					target = self.transformLocation(int(x) + (x_offset * 8), int(y) + (y_offset * 8))
 
-					self.select_point = None
+					self.point_selected = None
 					self.states_happened.append((self.prev_state, self.move_number))
 					self.actions_taken.append((_ATTACK_MINIMAP, [_NOT_QUEUED, target]))
 					return actions.FunctionCall(_ATTACK_MINIMAP, [_NOT_QUEUED, target])
+				self.point_selected = None
 
+
+			elif action == 'b' and unit == 'techlab' and _BUILD_TECHLAB in obs.observation['available_actions']:
+				if self.point_selected[1] == 'barracks':
+					target = self.point_selected[0]
+					self.point_selected = None
+					self.states_happened.append((self.prev_state, self.move_number))
+					self.actions_taken.append((_BUILD_TECHLAB, [_NOT_QUEUED, target]))
+					return actions.FunctionCall(_BUILD_TECHLAB, [_NOT_QUEUED, target])
+				self.point_selected = None
+
+			elif action == 'b' and unit == 'reactor' and _BUILD_REACTOR in obs.observation['available_actions']:
+				if self.point_selected[1] == 'barracks':
+					target = self.point_selected[0]
+					self.point_selected = None
+					self.states_happened.append((self.prev_state, self.move_number))
+					self.actions_taken.append((_BUILD_REACTOR, [_NOT_QUEUED, target]))
+					return actions.FunctionCall(_BUILD_REACTOR, [_NOT_QUEUED, target])
+				self.point_selected = None
 
 ## ------------------------------------------------------------------------------------------------------------------- ##
 ## xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx ##

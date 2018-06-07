@@ -429,12 +429,18 @@ class SwarmbotAgent(base_agent.BaseAgent):
 	def select_valid_SCV(self, unit_x, unit_y, obs):
 		self.unit_types = obs.observation['screen'][_UNIT_TYPE]
 		mf_y, mf_x = (self.unit_types == _NEUTRAL_MINERAL_FIELD).nonzero()
+		limit_x = 0
+		limit_y = 0
 		if self.base_top_left:
-			limit_x = max(mf_x) - 2
-			limit_y = min(mf_y) + 2
-		else:
-			limit_x = min(mf_x) - 2
-			limit_y = max(mf_y) + 2
+			if mf_x.any():
+				limit_x = max(mf_x) - 2
+			if mf_y.any():
+				limit_y = min(mf_y) + 2
+		else:			
+			if mf_x.any():
+				limit_x = min(mf_x) - 2
+			if mf_y.any():
+				limit_y = max(mf_y) + 2
 		target = None
 		for i in range(len(unit_y)):
 			if self.base_top_left:

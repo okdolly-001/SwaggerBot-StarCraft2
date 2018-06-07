@@ -44,6 +44,7 @@ _PLAYER_RELATIVE = features.SCREEN_FEATURES.player_relative.index
 _UNIT_TYPE = features.SCREEN_FEATURES.unit_type.index
 _PLAYER_ID = features.SCREEN_FEATURES.player_id.index
 
+#Define the actions 
 ACTION_DO_NOTHING = 'donothing'
 ACTION_SELECT_SCV = 'selectscv'
 ACTION_BUILD_SUPPLY_DEPOT = 'buildsupplydepot'
@@ -104,6 +105,7 @@ class DQNAgent(base_agent.BaseAgent):
         self.previous_action = None
         self.previous_state = None
 
+    #Add a helper method to work with location relative to the base
     def transformLocation(self, x, x_distance, y, y_distance):
         if not self.base_top_left:
             return [x - x_distance, y - y_distance]
@@ -130,15 +132,18 @@ class DQNAgent(base_agent.BaseAgent):
 
         unit_type = obs.observation['screen'][_UNIT_TYPE]
 
+        #location of the supply depot 
         depot_y, depot_x = (unit_type == _TERRAN_SUPPLY_DEPOT).nonzero()
         supply_depot_count = supply_depot_count = 1 if depot_y.any() else 0
 
+        #Get location of the barracks 
         barracks_y, barracks_x = (unit_type == _TERRAN_BARRACKS).nonzero()
         barracks_count = 1 if barracks_y.any() else 0
 
         supply_limit = obs.observation['player'][4]
         army_supply = obs.observation['player'][5]
 
+        #make state 
         state = torch.FloatTensor([[float(can_move), float(player_located),
                                     float(supply_depot_count), float(
                                         barracks_count), float(supply_limit),
@@ -168,6 +173,7 @@ class DQNAgent(base_agent.BaseAgent):
         self.previous_action = temp_action
         self.previous_state = state
 
+        #Diagnostics of actions taken 
         self.diagnostics[temp_action] += 1
 
         print(self.diagnostics)
@@ -175,6 +181,7 @@ class DQNAgent(base_agent.BaseAgent):
         if check_available(obs, _NO_OP) and smart_action == ACTION_DO_NOTHING:
             return actions.FunctionCall(_NO_OP, [])
 
+        #select SCV 
         elif smart_action == ACTION_SELECT_SCV:
             unit_y, unit_x = (unit_type == _TERRAN_SCV).nonzero()
             if unit_y.any():
@@ -182,6 +189,7 @@ class DQNAgent(base_agent.BaseAgent):
                 target = [unit_x[i], unit_y[i]]
                 return actions.FunctionCall(_SELECT_POINT, [_NOT_QUEUED, target])
 
+        #build suppy depot 
         elif check_available(obs, _BUILD_SUPPLY_DEPOT) and smart_action == ACTION_BUILD_SUPPLY_DEPOT:
             if _BUILD_SUPPLY_DEPOT in obs.observation['available_actions']:
                 unit_y, unit_x = (unit_type == _TERRAN_COMMANDCENTER).nonzero()
@@ -190,7 +198,7 @@ class DQNAgent(base_agent.BaseAgent):
                     target = self.transformLocation(
                         int(unit_x.mean()), 0, int(unit_y.mean()), 20)
                     return actions.FunctionCall(_BUILD_SUPPLY_DEPOT, [_NOT_QUEUED, target])
-
+        #build barracks 
         elif check_available(obs, _BUILD_BARRACKS) and smart_action == ACTION_BUILD_BARRACKS:
             unit_y, unit_x = (unit_type == _TERRAN_COMMANDCENTER).nonzero()
 
@@ -199,7 +207,7 @@ class DQNAgent(base_agent.BaseAgent):
                     int(unit_x.mean()), 20, int(unit_y.mean()), 0)
 
                 return actions.FunctionCall(_BUILD_BARRACKS, [_NOT_QUEUED, target])
-
+        #to attack
         elif smart_action == ACTION_ATTACK:
             do_it = True
             if len(obs.observation['single_select']) > 0 and obs.observation['single_select'][0][0] == _TERRAN_SCV:
@@ -210,13 +218,13 @@ class DQNAgent(base_agent.BaseAgent):
                 if self.base_top_left:
                     return actions.FunctionCall(_ATTACK_MINIMAP, [_NOT_QUEUED, [39, 45]])
                 return actions.FunctionCall(_ATTACK_MINIMAP, [_NOT_QUEUED, [21, 24]])
-
+        #To select army 
         elif check_available(obs, _SELECT_ARMY) and smart_action == ACTION_SELECT_ARMY:
             return actions.FunctionCall(_SELECT_ARMY, [_NOT_QUEUED])
-
+        #To build marine 
         elif check_available(obs, _TRAIN_MARINE) and smart_action == ACTION_BUILD_MARINE:
             return actions.FunctionCall(_TRAIN_MARINE, [_QUEUED])
-
+        #To select barracks 
         elif smart_action == ACTION_SELECT_BARRACKS:
             unit_y, unit_x = (unit_type == _TERRAN_BARRACKS).nonzero()
             if unit_y.any():
@@ -275,6 +283,7 @@ class DQNAgent(base_agent.BaseAgent):
 
         optimizer.step()
 
+    #Greedy method to choose the next action 
     def select_action(self, state, n):
         epsilon = 0.05 + (0.9 - 0.05) * math.exp(-1. * n / 200)
 

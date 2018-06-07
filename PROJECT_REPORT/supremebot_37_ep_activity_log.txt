@@ -1,0 +1,145 @@
+Arias-MacBook:SWARMBOT aria$ bash run_agent.sh 
+I0606 23:25:25.493771 140735891063680 sc_process.py:148] Connection attempt 0 (running: None)
+I0606 23:25:26.504590 140735891063680 sc_process.py:148] Connection attempt 1 (running: None)
+err = 3 /opt/blizzard/buildserver/data.noindex/repositories/sc2/branches/SC2.2018Season2/Game/Contrib/macteam/libs/ClampCursor/Contrib/mach_override/mach_override.c:244
+err = 3 /opt/blizzard/buildserver/data.noindex/repositories/sc2/branches/SC2.2018Season2/Game/Contrib/macteam/libs/ClampCursor/Contrib/mach_override/mach_override.c:258
+err = 3 /opt/blizzard/buildserver/data.noindex/repositories/sc2/branches/SC2.2018Season2/Game/Contrib/macteam/libs/ClampCursor/Contrib/mach_override/mach_override.c:263
+NSWindowEdgeResizing is off!
+I0606 23:25:27.509910 140735891063680 sc_process.py:148] Connection attempt 2 (running: None)
+I0606 23:25:28.511283 140735891063680 sc_process.py:148] Connection attempt 3 (running: None)
+I0606 23:25:29.512132 140735891063680 sc_process.py:148] Connection attempt 4 (running: None)
+I0606 23:25:30.515173 140735891063680 sc_process.py:148] Connection attempt 5 (running: None)
+I0606 23:25:31.516367 140735891063680 sc_process.py:148] Connection attempt 6 (running: None)
+I0606 23:25:32.522145 140735891063680 sc_process.py:148] Connection attempt 7 (running: None)
+I0606 23:25:33.523151 140735891063680 sc_process.py:148] Connection attempt 8 (running: None)
+I0606 23:25:34.525824 140735891063680 sc_process.py:148] Connection attempt 9 (running: None)
+I0606 23:25:35.530298 140735891063680 sc_process.py:148] Connection attempt 10 (running: None)
+I0606 23:25:36.534218 140735891063680 sc_process.py:148] Connection attempt 11 (running: None)
+I0606 23:25:37.537686 140735891063680 sc_process.py:148] Connection attempt 12 (running: None) I0606 23:25:38.538492 140735891063680 sc_process.py:148] Connection attempt 13 (running: None)
+I0606 23:25:39.541718 140735891063680 sc_process.py:148] Connection attempt 14 (running: None)
+I0606 23:25:53.946576 140735891063680 sc2_env.py:200] Environment is ready.
+I0606 23:25:53.954802 140735891063680 sc2_env.py:240] Starting episode: 1
+   0/no_op                                              ()
+   1/move_camera                                        (1/minimap [64, 64])
+   2/select_point                                       (6/select_point_act [4]; 0/screen [84, 84])
+   3/select_rect                                        (7/select_add [2]; 0/screen [84, 84]; 2/screen2 [84, 84])
+   4/select_control_group                               (4/control_group_act [5]; 5/control_group_id [10])
+ 453/Stop_quick                                         (3/queued [2])
+ 230/Effect_Spray_screen                                (3/queued [2]; 0/screen [84, 84])
+ 451/Smart_screen                                       (3/queued [2]; 0/screen [84, 84])
+ 264/Harvest_Gather_screen                              (3/queued [2]; 0/screen [84, 84])
+ 452/Smart_minimap                                      (3/queued [2]; 1/minimap [64, 64])
+ 331/Move_screen                                        (3/queued [2]; 0/screen [84, 84])
+ 332/Move_minimap                                       (3/queued [2]; 1/minimap [64, 64])
+ 333/Patrol_screen                                      (3/queued [2]; 0/screen [84, 84])
+ 334/Patrol_minimap                                     (3/queued [2]; 1/minimap [64, 64])
+  12/Attack_screen                                      (3/queued [2]; 0/screen [84, 84])
+  13/Attack_minimap                                     (3/queued [2]; 1/minimap [64, 64])
+ 274/HoldPosition_quick                                 (3/queued [2])
+ 220/Effect_Repair_screen                               (3/queued [2]; 0/screen [84, 84])
+ 221/Effect_Repair_autocast                             ()
+ 269/Harvest_Return_quick                               (3/queued [2])
+  79/Build_Refinery_screen                              (3/queued [2]; 0/screen [84, 84])
+  91/Build_SupplyDepot_screen                           (3/queued [2]; 0/screen [84, 84])
+  50/Build_EngineeringBay_screen                        (3/queued [2]; 0/screen [84, 84])
+  44/Build_CommandCenter_screen                         (3/queued [2]; 0/screen [84, 84])
+ 261/Halt_quick                                         (3/queued [2])
+ 140/Cancel_quick                                       (3/queued [2])
+buildserver/data.noindex/repositories/s  42/Build_Barracks_screen                              (3/queued [2]; 0/screen [84, 84])
+   6/select_idle_worker                                 (10/select_worker [4])
+ 335/Rally_Units_screen                                 (3/queued [2]; 0/screen [84, 84])
+ 336/Rally_Units_minimap                                (3/queued [2]; 1/minimap [64, 64])
+  43/Build_Bunker_screen                                (3/queued [2]; 0/screen [84, 84])
+  53/Build_Factory_screen                               (3/queued [2]; 0/screen [84, 84])
+  58/Build_GhostAcademy_screen                          (3/queued [2]; 0/screen [84, 84])
+ 477/Train_Marine_quick                                 (3/queued [2])
+  72/Build_Reactor_screen                               (3/queued [2]; 0/screen [84, 84])
+ 488/Train_Reaper_quick                                 (3/queued [2])
+ 281/Lift_quick                                         (3/queued [2])
+  93/Build_TechLab_screen                               (3/queued [2]; 0/screen [84, 84])
+ 275/Land_screen                                        (3/queued [2]; 0/screen [84, 84])
+I0606 23:27:48.896713 140735891063680 sc2_env.py:310] Episode finished. Outcome: [-1], reward: [-1], score: [2846]
+I0606 23:27:57.355919 140735891063680 sc2_env.py:240] Starting episode: 2
+I0606 23:29:08.741028 140735891063680 sc2_env.py:310] Episode finished. Outcome: [-1], reward: [-1], score: [5116]
+I0606 23:29:17.059448 140735891063680 sc2_env.py:240] Starting episode: 3
+I0606 23:30:48.428675 140735891063680 sc2_env.py:310] Episode finished. Outcome: [-1], reward: [-1], score: [2394]
+I0606 23:30:56.697392 140735891063680 sc2_env.py:240] Starting episode: 4
+I0606 23:32:34.118618 140735891063680 sc2_env.py:310] Episode finished. Outcome: [-1], reward: [-1], score: [2901]
+I0606 23:32:43.662159 140735891063680 sc2_env.py:240] Starting episode: 5
+ 476/Train_Marauder_quick                               (3/queued [2])
+I0606 23:34:51.805175 140735891063680 sc2_env.py:310] Episode finished. Outcome: [-1], reward: [-1], score: [3773]
+I0606 23:35:03.076221 140735891063680 sc2_env.py:240] Starting episode: 6
+I0606 23:38:16.465423 140735891063680 sc2_env.py:310] Episode finished. Outcome: [-1], reward: [-1], score: [953]
+I0606 23:38:28.148509 140735891063680 sc2_env.py:240] Starting episode: 7
+I0606 23:41:58.904711 140735891063680 sc2_env.py:310] Episode finished. Outcome: [0], reward: [0], score: [2252]
+I0606 23:42:10.404114 140735891063680 sc2_env.py:240] Starting episode: 8
+I0606 23:45:26.086750 140735891063680 sc2_env.py:310] Episode finished. Outcome: [-1], reward: [-1], score: [2726]
+I0606 23:45:37.577390 140735891063680 sc2_env.py:240] Starting episode: 9
+I0606 23:49:18.820883 140735891063680 sc2_env.py:310] Episode finished. Outcome: [0], reward: [0], score: [2764]
+I0606 23:49:30.441146 140735891063680 sc2_env.py:240] Starting episode: 10
+I0606 23:53:12.653339 140735891063680 sc2_env.py:310] Episode finished. Outcome: [0], reward: [0], score: [1417]
+I0606 23:53:24.390295 140735891063680 sc2_env.py:240] Starting episode: 11
+I0606 23:56:27.702156 140735891063680 sc2_env.py:310] Episode finished. Outcome: [-1], reward: [-1], score: [1256]
+I0606 23:56:39.264261 140735891063680 sc2_env.py:240] Starting episode: 12
+I0607 00:00:48.008563 140735891063680 sc2_env.py:310] Episode finished. Outcome: [0], reward: [0], score: [1259]
+I0607 00:00:59.768501 140735891063680 sc2_env.py:240] Starting episode: 13
+I0607 00:03:56.277967 140735891063680 sc2_env.py:310] Episode finished. Outcome: [-1], reward: [-1], score: [1318]
+I0607 00:04:08.168533 140735891063680 sc2_env.py:240] Starting episode: 14
+I0607 00:07:02.621641 140735891063680 sc2_env.py:310] Episode finished. Outcome: [-1], reward: [-1], score: [2371]
+I0607 00:07:14.426052 140735891063680 sc2_env.py:240] Starting episode: 15
+I0607 00:10:35.559423 140735891063680 sc2_env.py:310] Episode finished. Outcome: [-1], reward: [-1], score: [1035]
+I0607 00:10:47.260589 140735891063680 sc2_env.py:240] Starting episode: 16
+I0607 00:14:17.750542 140735891063680 sc2_env.py:310] Episode finished. Outcome: [-1], reward: [-1], score: [906]
+I0607 00:14:29.529366 140735891063680 sc2_env.py:240] Starting episode: 17
+I0607 00:16:46.491674 140735891063680 sc2_env.py:310] Episode finished. Outcome: [-1], reward: [-1], score: [1569]
+I0607 00:16:58.356817 140735891063680 sc2_env.py:240] Starting episode: 18
+I0607 00:20:03.203318 140735891063680 sc2_env.py:310] Episode finished. Outcome: [-1], reward: [-1], score: [2411]
+I0607 00:20:14.948474 140735891063680 sc2_env.py:240] Starting episode: 19
+I0607 00:23:05.925018 140735891063680 sc2_env.py:310] Episode finished. Outcome: [-1], reward: [-1], score: [285]
+I0607 00:23:17.683419 140735891063680 sc2_env.py:240] Starting episode: 20
+I0607 00:27:44.619072 140735891063680 sc2_env.py:310] Episode finished. Outcome: [0], reward: [0], score: [1379]
+I0607 00:27:56.488189 140735891063680 sc2_env.py:240] Starting episode: 21
+I0607 00:31:12.408689 140735891063680 sc2_env.py:310] Episode finished. Outcome: [-1], reward: [-1], score: [951]
+I0607 00:31:23.995760 140735891063680 sc2_env.py:240] Starting episode: 22
+I0607 00:35:09.549021 140735891063680 sc2_env.py:310] Episode finished. Outcome: [-1], reward: [-1], score: [677]
+I0607 00:35:21.301450 140735891063680 sc2_env.py:240] Starting episode: 23
+I0607 00:37:49.970787 140735891063680 sc2_env.py:310] Episode finished. Outcome: [-1], reward: [-1], score: [1412]
+I0607 00:38:01.686085 140735891063680 sc2_env.py:240] Starting episode: 24
+I0607 00:40:54.589954 140735891063680 sc2_env.py:310] Episode finished. Outcome: [-1], reward: [-1], score: [1545]
+I0607 00:41:06.500083 140735891063680 sc2_env.py:240] Starting episode: 25
+I0607 00:44:32.463215 140735891063680 sc2_env.py:310] Episode finished. Outcome: [-1], reward: [-1], score: [1510]
+I0607 00:44:43.010207 140735891063680 sc2_env.py:240] Starting episode: 26
+I0607 00:48:57.092657 140735891063680 sc2_env.py:310] Episode finished. Outcome: [-1], reward: [-1], score: [1573]
+I0607 00:49:08.821943 140735891063680 sc2_env.py:240] Starting episode: 27
+I0607 00:52:48.274607 140735891063680 sc2_env.py:310] Episode finished. Outcome: [-1], reward: [-1], score: [2569]
+I0607 00:52:58.920448 140735891063680 sc2_env.py:240] Starting episode: 28
+I0607 00:55:57.397959 140735891063680 sc2_env.py:310] Episode finished. Outcome: [-1], reward: [-1], score: [408]
+I0607 00:56:07.956862 140735891063680 sc2_env.py:240] Starting episode: 29
+I0607 01:00:57.902542 140735891063680 sc2_env.py:310] Episode finished. Outcome: [0], reward: [0], score: [2706]
+I0607 01:01:08.912634 140735891063680 sc2_env.py:240] Starting episode: 30
+I0607 01:05:09.610702 140735891063680 sc2_env.py:310] Episode finished. Outcome: [-1], reward: [-1], score: [1873]
+I0607 01:05:18.642636 140735891063680 sc2_env.py:240] Starting episode: 31
+I0607 01:10:06.409918 140735891063680 sc2_env.py:310] Episode finished. Outcome: [0], reward: [0], score: [2718]
+I0607 01:10:17.207044 140735891063680 sc2_env.py:240] Starting episode: 32
+ 318/Morph_SupplyDepot_Lower_quick                      (3/queued [2])
+I0607 01:14:19.764950 140735891063680 sc2_env.py:310] Episode finished. Outcome: [-1], reward: [-1], score: [1258]
+I0607 01:14:29.295752 140735891063680 sc2_env.py:240] Starting episode: 33
+I0607 01:18:46.898056 140735891063680 sc2_env.py:310] Episode finished. Outcome: [-1], reward: [-1], score: [722]
+I0607 01:18:55.752740 140735891063680 sc2_env.py:240] Starting episode: 34
+I0607 01:21:40.592503 140735891063680 sc2_env.py:310] Episode finished. Outcome: [-1], reward: [-1], score: [2188]
+I0607 01:21:49.269973 140735891063680 sc2_env.py:240] Starting episode: 35
+I0607 01:25:08.579168 140735891063680 sc2_env.py:310] Episode finished. Outcome: [-1], reward: [-1], score: [2275]
+I0607 01:25:17.332832 140735891063680 sc2_env.py:240] Starting episode: 36
+I0607 01:27:34.401849 140735891063680 sc2_env.py:310] Episode finished. Outcome: [-1], reward: [-1], score: [3365]
+I0607 01:27:43.473574 140735891063680 sc2_env.py:240] Starting episode: 37
+Took 7314.111 seconds for 100000 steps: 13.672 fps
+I0607 01:27:48.126122 140735891063680 sc2_env.py:320] Wrote replay to: /Applications/StarCraft II/Replays/SwarmbotAgent/Simple64_2018-06-07-08-27-48.SC2Replay
+I0607 01:27:48.126626 140735891063680 sc2_env.py:327] Environment Close
+I0607 01:27:48.127088 140735891063680 sc2_env.py:342] 
+I0607 01:27:48.127274 140735891063680 sc2_env.py:327] Environment Close
+I0607 01:27:48.127535 140735891063680 sc2_env.py:342] 
+I0607 01:27:48.127712 140735891063680 sc2_env.py:327] Environment Close
+I0607 01:27:48.127973 140735891063680 sc2_env.py:342] 
+W0607 01:27:51.459427 140735891063680 sc_process.py:183] Killing the process.
+I0607 01:27:51.707898 140735891063680 sc_process.py:166] Shutdown with return code: -9
+

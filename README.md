@@ -1,7 +1,7 @@
 # StarCraft II Project
 
-LINK TO FINAL REPORT: 
-https://docs.google.com/document/d/1rGNT-FewqNGADfP3NlT_gwlpi6qQWJgueertoMBnUAs/edit
+LINK TO FINAL REPORT: [Here]
+(https://docs.google.com/document/d/1rGNT-FewqNGADfP3NlT_gwlpi6qQWJgueertoMBnUAs/edit)
 
 
 Update:

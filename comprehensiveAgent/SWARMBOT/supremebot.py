@@ -367,7 +367,9 @@ class SwarmbotAgent(base_agent.BaseAgent):
 			area = self.unit_types[s_target_y : s_target_y + 6][s_target_x : s_target_x + 6]
 			space_available = not any(x in area for x in Buildings)
 			## if the mineral fields are not in the way... idk if vespene geysers might need to be included as well
-			within_mineral_field = (min(mf_y) < s_target_y < max(mf_y)) and (min(mf_x) < s_target_x < max(mf_x) + 11)
+			within_mineral_field = 0
+			if mf_y.any() and mf_x.any():
+				within_mineral_field = (min(mf_y) < s_target_y < max(mf_y)) and (min(mf_x) < s_target_x < max(mf_x) + 11)
 			chance += -1 
 			## once you know that the building is within the map area
 			## once you know that there is space available to place it in

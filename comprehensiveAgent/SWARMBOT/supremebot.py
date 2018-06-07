@@ -229,7 +229,7 @@ smart_actions = [
 	#ACTION_T_HELLION, 			
 	#ACTION_T_LIBERATOR, 		
 	#ACTION_T_MARAUDER,
-	ACTION_T_MARINE, 			
+	#ACTION_T_MARINE, 			
 	#ACTION_T_MEDIVAC,			
 	#ACTION_T_RAVEN,
 	#ACTION_T_REAPER,			
@@ -281,7 +281,7 @@ class QLearningTable:
 	def save_csv(self, name):
 		self.round += 1
 		self.q_table.to_csv(name)
-		print("Saving")
+		# print("Saving")
 		accum_f = open("acc_qtable.csv", "w")
 		accum_f.write(str(self.q_table)+"\n")
 		accum_f.write("Round: "+str(self.round)+"\n")
@@ -305,7 +305,8 @@ class QLearningTable:
 		return int(action)
 
 	def printTable(self):
-		print(self.q_table)
+		# print(self.q_table)
+		pass
 		
 	def learn(self, s, a, r, s_):
 		self.check_state_exist(s_)
@@ -497,6 +498,8 @@ class SwarmbotAgent(base_agent.BaseAgent):
 			self.prev_state = None
 			self.prev_action = None
 
+			self.prev_reward = 0
+
 			self.current_state = []
 
 		if obs.last():
@@ -533,8 +536,13 @@ class SwarmbotAgent(base_agent.BaseAgent):
 			self.current_state = self.get_current_state(obs, hot_squares)
 
 			if self.prev_action is not None:
-				self.qlearn.learn(str(self.prev_state), self.prev_action, 0, str(self.current_state))
-
+				if self.prev_reward != 0:
+					rr = np.sum(self.current_state)
+					rwrd = rr - self.prev_reward
+					self.prev_reward = rr
+					self.qlearn.learn(str(self.prev_state), self.prev_action, rwrd, str(self.current_state))
+				else:
+					self.prev_reward = np.sum(self.current_state)
 			## use q table to learn previous action and to choose an action.
 			new_action = self.qlearn.choose_action(str(self.current_state))
 
@@ -547,7 +555,8 @@ class SwarmbotAgent(base_agent.BaseAgent):
 ## ------------------------------------------------------------------------------------------------------------------- ##
 
 			action, x, y, unit, attachment = self.splitAction(self.prev_action)
-			print(action, x, y, unit, attachment)
+			# print(action, x, y, unit, attachment)
+
 
 			if action == 'b' and unit == 'supplydepot' and _SELECT_POINT in obs.observation['available_actions']:
 				self.unit_types = obs.observation['screen'][_UNIT_TYPE]
@@ -619,6 +628,7 @@ class SwarmbotAgent(base_agent.BaseAgent):
 				if attachment == 'barracks':
 					unit_y, unit_x = (self.unit_types == _BARRACKS).nonzero()
 					if unit_y.any():
+						# print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
 						j = random.randint(0, len(unit_y) - 1)
 						target = [unit_x[j], unit_y[j]]
 						self.point_selected = (target, 'barracks')
@@ -637,11 +647,11 @@ class SwarmbotAgent(base_agent.BaseAgent):
 			self.move_number += 1
 
 			action, x, y, unit, attachment = self.splitAction(self.prev_action)
-			print(action, x, y, unit, attachment)
+			# print(action, x, y, unit, attachment)
 
 			if action == 'b' and unit == 'supplydepot' and _BUILD_SUPPLY_DEPOT in obs.observation['available_actions']:
 				target = self.findLocationForBuilding(building_sizes['supplydepot'])
-				if self.point_selected[1] == 'scv' and target is not None:
+				if self.point_selected and self.point_selected[1] == 'scv' and target is not None:
 					self.point_selected = None
 					if _SUPPLY_DEPOT in self.unit_counts and self.unit_counts[_SUPPLY_DEPOT] <= 5:
 						self.unit_counts[_SUPPLY_DEPOT] += 1
@@ -676,7 +686,7 @@ class SwarmbotAgent(base_agent.BaseAgent):
 
 			elif action == 'b' and unit == 'barracks' and _BUILD_BARRACKS in obs.observation['available_actions']:
 				target = self.findLocationForBuilding(building_sizes['barracks'])
-				if self.point_selected[1] == 'scv' and target is not None:
+				if self.point_selected is not None and self.point_selected[1] == 'scv' and target is not None:
 					self.point_selected = None
 					if _BARRACKS in self.unit_counts and self.unit_counts[_BARRACKS] <= 4:
 						self.unit_counts[_BARRACKS] += 1
@@ -718,7 +728,7 @@ class SwarmbotAgent(base_agent.BaseAgent):
 
 
 			elif action == 'b' and unit == 'techlab' and _BUILD_TECHLAB in obs.observation['available_actions']:
-				if self.point_selected[1] == 'barracks':
+				if self.point_selected and self.point_selected[1] == 'barracks':
 					target = self.point_selected[0]
 					self.point_selected = None
 					self.states_happened.append((self.prev_state, self.move_number))
@@ -727,7 +737,9 @@ class SwarmbotAgent(base_agent.BaseAgent):
 				self.point_selected = None
 
 			elif action == 'b' and unit == 'reactor' and _BUILD_REACTOR in obs.observation['available_actions']:
-				if self.point_selected[1] == 'barracks':
+				# print('##########################################################')
+
+				if self.point_selected and self.point_selected[1] == 'barracks':
 					target = self.point_selected[0]
 					self.point_selected = None
 					self.states_happened.append((self.prev_state, self.move_number))

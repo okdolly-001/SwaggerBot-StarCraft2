@@ -1,6 +1,5 @@
 import numpy as np
 from numpy import *
-import math
 import matplotlib.pyplot as plt
 import csv
 
@@ -38,5 +37,5 @@ with open("reward.txt", 'rU') as f:
 			percetage_tie_so_far.append(cur_tie_prob_count)						
 
 	# plots all 3 functions on same graph
-	plt.plot(win_so_far, percetage_win_so_far, loss_so_far, percetage_loss_so_far, tie_so_far, percetage_tie_so_far)
+	plt.plot(win_so_far, percetage_win_so_far, "b", loss_so_far, percetage_loss_so_far, "g", tie_so_far, percetage_tie_so_far, "y")
 	plt.show()

@@ -21,7 +21,7 @@ with open("reward.txt", 'rU') as f:
             cur_win_count = cur_win_count + 1
             win_so_far.append(cur_win_count)
 
-            cur_win_prob_count = cur_win_count / game_count / 100
+            cur_win_prob_count = cur_win_count / game_count * 100
             percetage_win_so_far.append(cur_win_prob_count)
 
             percetage_loss_so_far.append(cur_loss_prob_count)
@@ -30,7 +30,7 @@ with open("reward.txt", 'rU') as f:
             cur_loss_count = cur_loss_count + 1
             loss_so_far.append(cur_loss_count)
  
-            cur_loss_prob_count = cur_loss_count / game_count / 100
+            cur_loss_prob_count = cur_loss_count / game_count * 100
             percetage_loss_so_far.append(cur_loss_prob_count)
 
             percetage_win_so_far.append(cur_win_prob_count)
@@ -39,7 +39,7 @@ with open("reward.txt", 'rU') as f:
             cur_tie_count = cur_tie_count + 1
             tie_so_far.append(cur_tie_count)
 
-            cur_tie_prob_count = cur_tie_count / game_count / 100
+            cur_tie_prob_count = cur_tie_count / game_count * 100
             percetage_tie_so_far.append(cur_tie_prob_count)
 
             percetage_win_so_far.append(cur_win_prob_count)

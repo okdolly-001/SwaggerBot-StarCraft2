@@ -229,7 +229,7 @@ smart_actions = [
 	#ACTION_T_HELLION, 			
 	#ACTION_T_LIBERATOR, 		
 	#ACTION_T_MARAUDER,
-	#ACTION_T_MARINE, 			
+	ACTION_T_MARINE, 			
 	#ACTION_T_MEDIVAC,			
 	#ACTION_T_RAVEN,
 	#ACTION_T_REAPER,			
@@ -260,7 +260,7 @@ for mm_x in range(0, 64):
 			smart_actions.append(ACTION_ATTACK + '_' + str(mm_x - 16) + '_' + str(mm_y - 16))
 
 class QLearningTable:
-	def __init__(self, actions, learning_rate=0.01, reward_decay=0.9, e_greedy=0.9):
+	def __init__(self, actions, learning_rate=0.01, reward_decay=0.9, e_greedy=0.1):
 		self.round = 0
 		self.actions = actions
 		self.lr = learning_rate

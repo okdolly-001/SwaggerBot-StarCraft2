@@ -47,7 +47,7 @@ with open("rewards.csv", 'rU') as f:
             percetage_loss_so_far.append(cur_loss_prob_count)
 
     # plots all 3 functions on same graph
-    plt.title('SumpremeBot Learning Trend')
+    plt.title('SupremeBot Learning Trend')
     plt.plot(count, percetage_win_so_far, "b", count,
              percetage_loss_so_far, "r", count, percetage_tie_so_far, "g")
     plt.legend(('Win', 'Loss', 'Tie'),

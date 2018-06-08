@@ -12,6 +12,8 @@ with open("reward.txt", 'rU') as f:
 
     game_count = 0
 
+    count = list(range(97))
+
     for row in res:
         row = ''.join(row)  # converts list to string
         game_count = game_count + 1  # game counter
@@ -19,25 +21,34 @@ with open("reward.txt", 'rU') as f:
             cur_win_count = cur_win_count + 1
             win_so_far.append(cur_win_count)
 
-            cur_win_prob_count = cur_win_count / game_count
+            cur_win_prob_count = cur_win_count / game_count / 100
             percetage_win_so_far.append(cur_win_prob_count)
+
+            percetage_loss_so_far.append(cur_loss_prob_count)
+            percetage_tie_so_far.append(cur_tie_prob_count) 
         elif row == "-1":
             cur_loss_count = cur_loss_count + 1
             loss_so_far.append(cur_loss_count)
-
-            cur_loss_prob_count = cur_loss_count / game_count
+ 
+            cur_loss_prob_count = cur_loss_count / game_count / 100
             percetage_loss_so_far.append(cur_loss_prob_count)
+
+            percetage_win_so_far.append(cur_win_prob_count)
+            percetage_tie_so_far.append(cur_tie_prob_count) 
         else:  # row == "0"
             cur_tie_count = cur_tie_count + 1
             tie_so_far.append(cur_tie_count)
 
-            cur_tie_prob_count = cur_tie_count / game_count
+            cur_tie_prob_count = cur_tie_count / game_count / 100
             percetage_tie_so_far.append(cur_tie_prob_count)
+
+            percetage_win_so_far.append(cur_win_prob_count)
+            percetage_loss_so_far.append(cur_loss_prob_count)
 
     # plots all 3 functions on same graph
     plt.title('SumpremeBot Learning Trend')
-    plt.plot(win_so_far, percetage_win_so_far, "b", loss_so_far,
-             percetage_loss_so_far, "r", tie_so_far, percetage_tie_so_far, "y")
+    plt.plot(count, percetage_win_so_far, "b", count,
+             percetage_loss_so_far, "r", count, percetage_tie_so_far, "g")
     plt.legend(('Win', 'Loss', 'Tie'),
                loc='upper right')
     plt.ylabel('Win%,Loss%,Tie%')

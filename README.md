@@ -1,7 +1,8 @@
 # StarCraft II Project
 
-LINK TO FINAL REPORT: [Here]
-(https://docs.google.com/document/d/1rGNT-FewqNGADfP3NlT_gwlpi6qQWJgueertoMBnUAs/edit)
+Final Report: [Here](https://docs.google.com/document/d/1rGNT-FewqNGADfP3NlT_gwlpi6qQWJgueertoMBnUAs/edit)
+Webiste: [Here](https://shraddha55.github.io/SwaggerBot/)
+
 
 
 Update:
